@@ -1,4 +1,4 @@
-# __PLATFORM_NAME__-terraform-backend
+# terraform-backend
 
 Add retention policy and enable versioning for production setups:
 
