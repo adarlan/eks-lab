@@ -1,8 +1,8 @@
 on:
   workflow_dispatch:
-  push:
-    branches: ['main']
-    paths: ['eks-cluster/**']
+  # push:
+  #   branches: ['main']
+  #   paths: ['eks-cluster/**']
 
 jobs:
 
@@ -44,6 +44,6 @@ jobs:
         working-directory: eks-cluster
         run: terraform plan -input=false -out .tfplan
 
-      # - name: Terraform apply
-      #   working-directory: eks-cluster
-      #   run: terraform apply -input=false .tfplan
+      - name: Terraform apply
+        working-directory: eks-cluster
+        run: terraform apply -input=false .tfplan
