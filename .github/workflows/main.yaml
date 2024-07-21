@@ -14,7 +14,7 @@ jobs:
 
       - name: Replace placeholders
         run: |
-          eval "$(echo "${{ variables.PLACEHOLDERS_JSON }}" | jq -r 'to_entries[] | "find . -type f -exec sed -i \"s/\(.key)/\(.value)/g\" {} +"')"
+          eval "$(echo "${{ secrets.PLACEHOLDERS_JSON }}" | jq -r 'to_entries[] | "find . -type f -exec sed -i \"s/\(.key)/\(.value)/g\" {} +"')"
           git diff
           cat ./eks-cluster/backend.tf
           if grep -rP '__[A-Z_]+__' .; then echo "Not all placeholders have been replaced"; exit 1; fi
