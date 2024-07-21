@@ -1,7 +1,8 @@
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - main
+    branches: ['main']
+    paths: ['eks-cluster/**']
 
 jobs:
 
@@ -15,9 +16,12 @@ jobs:
       - name: Replace placeholders
         run: |
           eval "$(echo '${{ vars.PLACEHOLDERS_JSON }}' | jq -r 'to_entries[] | "find . -type f -exec sed -i \"s/\(.key)/\(.value)/g\" {} +"')"
-          git diff
-          cat ./eks-cluster/backend.tf
           if grep -rP '__[A-Z_]+__' .; then echo "Not all placeholders have been replaced"; exit 1; fi
+
+      - name: AWS configure
+        run: |
+          aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -27,11 +31,6 @@ jobs:
       - name: Terraform format check
         working-directory: eks-cluster
         run: terraform fmt -check -recursive -diff
-
-      - name: AWS configure
-        run: |
-          aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
-          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
 
       - name: Terraform init
         working-directory: eks-cluster
