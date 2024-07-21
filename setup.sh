@@ -13,7 +13,8 @@ main() {
     [ -f .env ] && source .env || touch .env
     # TODO instead of using the existing file, always download it with 'gh variable get'
 
-    read_config_param    project_name      'echo "demo"'
+    read_config_param    github_repo_name  'gh repo view --json name -q .name'
+    read_config_param    project_name      'echo "$github_repo_name"'
     read_config_param    github_user       'gh api user | jq -r .login'
     read_config_param    random_string     'tr -dc "a-z0-9" </dev/urandom | head -c 6'
     read_config_param    aws_cli_profile   'echo "default"'
@@ -45,17 +46,12 @@ main() {
     }"
 
     echo "$PLACEHOLDERS_JSON" | jq
+    gh variable set PLACEHOLDERS_JSON --body "$PLACEHOLDERS_JSON" --repo $github_user/$github_repo_name
 
-    repo_name=eks-lab
-    # TODO get repo name from git remote
-
-    gh variable set PLACEHOLDERS_JSON --body "$PLACEHOLDERS_JSON" --repo $github_user/$repo_name
-
-    # Create AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY secrets
     AWS_ACCESS_KEY_ID=$(aws --profile=$aws_cli_profile configure get aws_access_key_id)
     AWS_SECRET_ACCESS_KEY=$(aws --profile=$aws_cli_profile configure get aws_secret_access_key)
-    gh secret set AWS_ACCESS_KEY_ID --body "$AWS_ACCESS_KEY_ID" --repo $github_user/$repo_name
-    gh secret set AWS_SECRET_ACCESS_KEY --body "$AWS_SECRET_ACCESS_KEY" --repo $github_user/$repo_name
+    gh secret set AWS_ACCESS_KEY_ID --body "$AWS_ACCESS_KEY_ID" --repo $github_user/$github_repo_name
+    gh secret set AWS_SECRET_ACCESS_KEY --body "$AWS_SECRET_ACCESS_KEY" --repo $github_user/$github_repo_name
 }
 
 read_config_param() {
