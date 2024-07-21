@@ -13,7 +13,7 @@ main() {
     [ -f .env ] && source .env || touch .env
     # TODO instead of using the existing file, always download it with 'gh variable get'
 
-    read_config_param    platform_name     'echo "demo"'
+    read_config_param    project_name      'echo "demo"'
     read_config_param    github_user       'gh api user | jq -r .login'
     read_config_param    random_string     'tr -dc "a-z0-9" </dev/urandom | head -c 6'
     read_config_param    aws_cli_profile   'echo "default"'
@@ -22,11 +22,11 @@ main() {
     read_config_param    aws_iam_user      'aws --profile=$aws_cli_profile iam get-user --query "User.UserName" --output text'
     read_config_param    aws_region        'aws --profile=$aws_cli_profile configure get region'
     read_config_param    registered_domain 'echo "example.com"'
-    read_config_param    base_host         'echo "$platform_name.$registered_domain"'
+    read_config_param    base_host         'echo "$project_name.$registered_domain"'
     read_config_param    email             'gh api -H "Accept: application/vnd.github+json" -H "X-GitHub-Api-Version: 2022-11-28" /user/public_emails | jq -r .[0].email'
 
     PLACEHOLDERS_JSON="{
-    \"__PLATFORM_NAME__\":                       \"$platform_name\",
+    \"__PLATFORM_NAME__\":                       \"$project_name\",
     \"__GITHUB_USER__\":                         \"$github_user\",
     \"__GITHUB_OWNER__\":                        \"$github_user\",
     \"__AWS_CLI_PROFILE__\":                     \"$aws_cli_profile\",
@@ -34,8 +34,8 @@ main() {
     \"__AWS_ACCOUNT_ALIAS__\":                   \"$aws_account_alias\",
     \"__AWS_REGION__\":                          \"$aws_region\",
     \"__AWS_IAM_USER__\":                        \"$aws_iam_user\",
-    \"__TERRAFORM_BACKEND_S3_BUCKET__\":         \"$platform_name-terraform-backend-$random_string\",
-    \"__TERRAFORM_BACKEND_S3_DYNAMODB_TABLE__\": \"$platform_name-terraform-state-lock\",
+    \"__TERRAFORM_BACKEND_S3_BUCKET__\":         \"$project_name-terraform-backend-$random_string\",
+    \"__TERRAFORM_BACKEND_S3_DYNAMODB_TABLE__\": \"$project_name-terraform-state-lock\",
     \"__TERRAFORM_BACKEND_S3_REGION__\":         \"$aws_region\",
     \"__DOMAIN_NAME__\":                         \"$registered_domain\",
     \"__BASE_HOST__\":                           \"$base_host\",
