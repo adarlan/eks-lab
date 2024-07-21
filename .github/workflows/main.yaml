@@ -15,6 +15,7 @@ jobs:
       - name: Replace placeholders
         run: |
           eval "$(echo "${{ env.PLACEHOLDERS_JSON }}" | jq -r 'to_entries[] | "find . -type f -exec sed -i \"s/\(.key)/\(.value)/g\" {} +"')"
+          git diff
           if grep -rP '__[A-Z_]+__' .; then echo "Not all placeholders have been replaced"; exit 1; fi
 
       - name: Setup Terraform
