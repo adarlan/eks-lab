@@ -12,5 +12,4 @@ cluster_name = "__PLATFORM_NAME__-cluster"
 # IAM users who will be given the cluster administrator policy
 cluster_administrators = [
   "__AWS_IAM_USER__",
-  "__PLATFORM_NAME__-cluster-tools",
 ]
