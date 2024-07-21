@@ -1,0 +1,51 @@
+name: Cluster Tools
+
+on:
+  workflow_dispatch:
+  # push:
+  #   branches: ['main']
+  #   paths: ['cluster-tools/**']
+
+jobs:
+
+  terraform-apply-cluster-tools:
+    runs-on: ubuntu-22.04
+    steps:
+
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Replace placeholders
+        run: |
+          eval "$(echo '${{ vars.PLACEHOLDERS_JSON }}' | jq -r 'to_entries[] | "find . -type f -exec sed -i \"s/\(.key)/\(.value)/g\" {} +"')"
+          grep -rP '__[A-Z_]+__' . && exit 1 || :
+
+      - name: AWS configure
+        run: |
+          aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
+          aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.3
+
+      - name: Terraform format check
+        working-directory: cluster-tools
+        run: terraform fmt -check -recursive -diff
+
+      - name: Terraform init
+        working-directory: cluster-tools
+        run: terraform init -input=false
+
+      - name: Terraform validate
+        working-directory: cluster-tools
+        run: terraform validate
+
+      - name: Terraform plan
+        working-directory: cluster-tools
+        run: terraform plan -input=false -out .tfplan
+
+      - name: Terraform apply
+        working-directory: cluster-tools
+        run: terraform apply -input=false .tfplan

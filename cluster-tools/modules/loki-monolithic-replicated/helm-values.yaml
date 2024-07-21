@@ -1,0 +1,37 @@
+loki:
+  commonConfig:
+    replication_factor: 3
+
+  schemaConfig:
+    configs:
+    - from: "2024-01-01"
+      store: tsdb
+      index:
+        prefix: loki_index_
+        period: 24h
+      object_store: s3
+      schema: v13
+
+  storage:
+    type: 's3'
+
+    # You can (and should) use the same bucket when using tsdb
+    # https://github.com/grafana/loki/issues/8524#issuecomment-1431049670
+    # bucketNames:
+    #   chunks: loki-chunks
+    #   ruler: loki-ruler
+    #   admin: loki-admin
+
+    s3:
+      # endpoint: foo.aws.com
+      # region: <AWS region>
+      # secretAccessKey: supersecret
+      # accessKeyId: secret
+      s3ForcePathStyle: false
+      insecure: false
+
+singleBinary:
+  replicas: 3
+# https://github.com/grafana/loki/blob/main/docs/sources/setup/install/helm/install-monolithic/_index.md
+# The documentation includes this configuration, but I get this error when enabling it:
+# Error: execution error at (loki/templates/validate.yaml:31:4): You have more than zero replicas configured for both the single binary and simple scalable targets. If this was intentional change the deploymentMode to the transitional 'SingleBinary<->SimpleScalable' mode
