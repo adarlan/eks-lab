@@ -1,7 +1,7 @@
 variable "eligible_zones" {
-  type    = list(string)
-  default = []
-  # TODO description: eligible_zones = ["a", "b", "c"]
+  description = "Example: [\"a\", \"b\", \"c\"]"
+  type        = list(string)
+  default     = []
 }
 
 variable "max_selected_zones" {

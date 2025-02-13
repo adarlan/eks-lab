@@ -11,8 +11,8 @@ variable "eks_cluster_name" {
 }
 
 variable "subnet_cidr_block_newbits" {
-  type = number
-  # 8
+  description = "Example: 8"
+  type        = number
 }
 
 variable "max_nat_gateway_count" {

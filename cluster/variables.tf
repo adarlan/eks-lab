@@ -11,8 +11,9 @@ variable "cluster_name" {
 }
 
 variable "cluster_administrators" {
-  type    = list(string)
-  default = []
+  description = "IAM users who will be given the cluster administrator policy"
+  type        = list(string)
+  default     = []
 }
 
 variable "aws_default_tags" {
