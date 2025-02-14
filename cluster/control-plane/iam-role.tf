@@ -1,12 +1,6 @@
 resource "aws_iam_role" "cluster_role" {
-
-  name = local.cluster_role_name
-
+  name               = local.cluster_role_name
   assume_role_policy = data.aws_iam_policy_document.cluster_role_assume_role_policy.json
-
-  tags = {
-    Name = local.cluster_role_name
-  }
 }
 
 data "aws_iam_policy_document" "cluster_role_assume_role_policy" {
