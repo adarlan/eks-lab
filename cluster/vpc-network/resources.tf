@@ -1,4 +1,35 @@
 # -----------------------------------------------
+# VPC
+# -----------------------------------------------
+
+resource "aws_vpc" "vpc" {
+
+  cidr_block = var.vpc_cidr_block
+
+  enable_dns_support   = true
+  enable_dns_hostnames = true
+  # https://docs.aws.amazon.com/vpc/latest/userguide/vpc-dns.html#vpc-dns-support
+  # enable_dns_support and enable_dns_hostnames must be enabled for EFS (?)
+
+  tags = {
+    Name = local.vpc_name
+  }
+}
+
+# -----------------------------------------------
+# Internet gateway
+# -----------------------------------------------
+
+resource "aws_internet_gateway" "internet_gateway" {
+
+  vpc_id = aws_vpc.vpc.id
+
+  tags = {
+    Name = local.internet_gateway_name
+  }
+}
+
+# -----------------------------------------------
 # Private subnets
 # -----------------------------------------------
 
@@ -6,7 +37,7 @@ resource "aws_subnet" "private" {
 
   for_each = local.private_subnets
 
-  vpc_id                  = var.vpc_id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = each.value.cidr_block
   availability_zone       = each.value.availability_zone
   map_public_ip_on_launch = false
@@ -27,7 +58,7 @@ resource "aws_subnet" "public" {
 
   for_each = local.public_subnets
 
-  vpc_id                  = var.vpc_id
+  vpc_id                  = aws_vpc.vpc.id
   cidr_block              = each.value.cidr_block
   availability_zone       = each.value.availability_zone
   map_public_ip_on_launch = true
@@ -63,16 +94,17 @@ resource "aws_nat_gateway" "nat_gateway" {
 
   for_each = local.nat_gateways
 
+  depends_on = [
+    # To ensure proper ordering, it is recommended to add an explicit
+    # dependency on the internet gateway.
+    aws_internet_gateway.internet_gateway
+  ]
+
   allocation_id = aws_eip.nat_eip[each.key].id
   subnet_id     = aws_subnet.public[each.key].id
 
   tags = {
-
     Name = each.value.nat_gateway_name
-
-    # NOTE To ensure proper ordering, it is recommended to add an explicit dependency on the VPC's Internet Gateway.
-    # As the Internet Gateway is not defined in this module, the dependency is implicit by this tag.
-    internet_gateway_id = var.internet_gateway_id
   }
 }
 
@@ -82,11 +114,11 @@ resource "aws_nat_gateway" "nat_gateway" {
 
 resource "aws_route_table" "public" {
 
-  vpc_id = var.vpc_id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block = "0.0.0.0/0"
-    gateway_id = var.internet_gateway_id
+    gateway_id = aws_internet_gateway.internet_gateway.id
   }
 
   tags = {
@@ -109,7 +141,7 @@ resource "aws_route_table" "private" {
 
   for_each = local.nat_gateways
 
-  vpc_id = var.vpc_id
+  vpc_id = aws_vpc.vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"
