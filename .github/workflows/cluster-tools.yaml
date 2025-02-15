@@ -25,6 +25,12 @@ jobs:
           aws configure set aws_access_key_id "${{ secrets.AWS_ACCESS_KEY_ID }}"
           aws configure set aws_secret_access_key "${{ secrets.AWS_SECRET_ACCESS_KEY }}"
 
+      - name: AWS EKS update kubeconfig
+        working-directory: cluster-tools
+        run: |
+          export KUBECONFIG=./kubeconfig
+          aws eks update-kubeconfig --name ${{ inputs.kubeconfig_eks_cluster_name }}
+
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
