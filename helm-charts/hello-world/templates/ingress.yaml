@@ -1,0 +1,41 @@
+{{ if .Values.ingress.enabled }}
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    {{ if eq .Values.ingress.path "" }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$1
+    {{ else }}
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    {{ end }}
+    {{ if .Values.ingress.tls.enabled }}
+    cert-manager.io/cluster-issuer: {{ .Values.ingress.tls.cluster_issuer }}
+    {{ end }}
+spec:
+  ingressClassName: nginx
+  {{ if .Values.ingress.tls.enabled }}
+  tls:
+  - hosts:
+    - {{ .Values.ingress.host }}
+    secretName: {{ printf "%s-tls" .Values.ingress.host }}
+  {{ end }}
+  rules:
+  - host: {{ .Values.ingress.host }}
+    http:
+      paths:
+      - pathType: ImplementationSpecific
+        {{ if eq .Values.ingress.path "" }}
+        path: /(.*)
+        {{ else }}
+        path: {{ .Values.ingress.path }}(/|$)(.*)
+        {{ end }}
+        backend:
+          service:
+            name: {{ .Release.Name }}
+            port:
+              name: web
+{{ end }}

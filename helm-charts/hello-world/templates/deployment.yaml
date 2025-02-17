@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    app: {{ .Release.Name }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Release.Name }}
+  replicas: {{ .Values.replicas }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}
+    spec:
+      containers:
+      - name: nginx
+        image: docker.io/nginx
+        ports:
+        - name: web
+          containerPort: 80
+        resources:
+          # TODO should we really define resources here or let the limit range define it?
+          # or define it in helm values?
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 50m
+            memory: 64Mi
+        livenessProbe:
+          httpGet:
+            port: web
+            path: /
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        # TODO add readinessProbe and startupProbe?
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html/index.html
+          name: config-map
+          subPath: index.html
+      volumes:
+      - name: config-map
+        configMap:
+          name: {{ .Release.Name }}

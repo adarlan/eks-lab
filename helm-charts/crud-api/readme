@@ -1,0 +1,4 @@
+it will be a simple crud with all 4 operations in the same service
+there is no need to create 4 separate services
+
+the client will be a different helm chart
