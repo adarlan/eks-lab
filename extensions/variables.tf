@@ -26,6 +26,16 @@ variable "record_names" {
   description = "The subdomains without the registered domain part. Examples: 'foo', 'bar', '*', '' (empty for domain)"
 }
 
+# variable "hosts" {
+#   type = list(string)
+#   description = "Examples: example.com, foo.example.com, *.example.com, *.foo.example.com"
+#   # TODO validation: must be equal "${var.registered_domain}" or end with ".${var.registered_domain}"
+# }
+
 variable "acme_email" {
   type = string
+}
+
+variable "acme_production" {
+  type = bool
 }
