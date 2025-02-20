@@ -1,6 +1,7 @@
 message: Hello World
 ingress:
   enabled: true
+  class_name: default-ingress-class
   host: hello.example.com
   path: ""
   tls:
