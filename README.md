@@ -42,40 +42,20 @@ cd eks-lab
 
 ### 2. 🏗️ Terraform Configuration
 
-The Terraform configurations in this repository contain placeholders in `terraform.tfvars` that must be replaced with actual values.
-You can do this manually or automate the process using a script.
+The Terraform configurations in this repository contain placeholders that must be replaced with actual values.
 
-#### Option 1: Manual Configuration
-
-Edit the `terraform.tfvars` files and replace all placeholders.
-
-Example:
-
-```diff
-- aws_region = "<AWS_REGION>"
-+ aws_region = "us-east-1"
-
-- cluster_name = "<CLUSTER_NAME>"
-+ cluster_name = "eks-lab"
-```
-
-To find all placeholders, search for `<[A-Z_]+>` pattern across the repository.
-
-#### Option 2: Automated Configuration
-
-Run the following script to generate `terraform.auto.tfvars` files, replacing the placeholder values from `terraform.tfvars`:
+To automate this process, run the following script:
 
 ```shell
-./generate-terraform-auto-tfvars.sh
+./terraform-config.sh
 ```
 
 This script will:
 
 - Prompt you for any required information
-- Save your inputs in a `.env` file for future runs
+- Save your inputs in a `terraform-config.env` file to prevent future prompts
 - Generate `terraform.auto.tfvars` files with the correct values
-
-Using `terraform.auto.tfvars` ensures Terraform picks up the correct configuration automatically, without modifying `terraform.tfvars` manually.
+- Generate `terraform.cloud.env` files with environment variables for the `terraform{ cloud{} }` block configuration
 
 ### 3. 🌥️ Cloud Setup
 
