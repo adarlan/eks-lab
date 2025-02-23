@@ -18,20 +18,24 @@ Cloud platform accounts:
 
 - Amazon Web Services (AWS) account
 - GitHub account
-- HashiCorp Cloud Platform (HCP) Terraform account
+- HashiCorp Cloud Platform (HCP) Terraform account and organization
 
-And their respective CLIs configure to access the accounts:
+And their respective CLIs configured to access the accounts:
 
 - `aws`
 - `gh`
 - `terraform`
+
+You also need a registered domain.
+It can be registered in any domain registrar,
+since you have a Route 53 hosted zone configured as DNS server.
 
 ## Setup
 
 ### Fork & Clone
 
 Fork this repository to your GitHub account and clone your fork on your computer.
-As this project requires configurations and credentials to access your cloud platform accounts,
+As this project requires configurations to access your cloud platform accounts,
 you need to work on your own repository.
 
 Example (cloning the repository with GitHub CLI, but feel free to clone with git over HTTPS or SSH):
@@ -44,6 +48,9 @@ cd eks-lab
 ### Configure `.env` File
 
 Create an `.env` file with some basic configurations.
+
+The Terraform configurations in this repository contain placeholders,
+and the data in the .env file will be used to replace them.
 
 This script will help you create the `.env` file quickly:
 
@@ -72,7 +79,8 @@ PROMETHEUS_HOST="prometheus.example.com"
 This project has multiple Terraform configurations.
 They contain a `terraform.tfvars` file with some placeholders.
 You need to generate a `terraform.auto.tfvars` with placeholders replaced by the values configured on the `.env` file.
-When a Terraform configuration contains both `terraform.tfvars` and `terraform.auto.tfvars` files, `terraform.auto.tfvars` takes precedence.
+
+> When a Terraform configuration contains both `terraform.tfvars` and `terraform.auto.tfvars` files, `terraform.auto.tfvars` takes precedence.
 
 This script will help you generate the `terraform.auto.tfvars` files quickly:
 
@@ -80,14 +88,12 @@ This script will help you generate the `terraform.auto.tfvars` files quickly:
 ./generate-terraform-auto-tfvars.sh
 ```
 
-If you prefer, instead of automatically generating these files, you can manually edit the terraform.tfvars files directly and replace the placeholders.
+If you prefer, instead of generating these files, you can manually edit the terraform.tfvars files and replace the placeholders.
 
 ### Cloud Setup
 
-The `cloud-setup` directory contains the Terraform configuration for
-HCP Terraform project, workspaces, variables and token, AWS IAM roles and OIDC provider, and GitHub Actions secrets.
-
-These resources are the configurations and credentials necessary to integrate the 3 platforms.
+The `cloud-setup` directory contains the Terraform configuration to create the configurations and credentials necessary to integrate the 3 platforms.
+It creates HCP Terraform project, workspaces, variables and token, AWS IAM roles and OIDC providers, and GitHub Actions secrets.
 
 Run the commands below to create these resources:
 
@@ -102,32 +108,10 @@ You're all set to create the EKS cluster along with all the required infrastruct
 install tools (ingress-nginx, cert-manager, etc),
 and deploy example applications.
 
-You can do this by either with GitHub Actions
-or executing commands locally.
-
-#### Deploy with GitHub Actions
+If you have changes to commit, do it and push them.
 
 On your repository on GitHub, navigate to the Actions tab,
 select the Deploy workflow on the left menu,
 and click "Run workflow" on the right.
 
 <!-- TODO screenshots -->
-
-#### Deploy with local commands
-
-```shell
-source .env
-export TF_CLOUD_ORGANIZATION="$ORGANIZATION"
-
-# VPC network
-export TF_WORKSPACE="$PROJECT-vpc-network"
-terraform -chdir vpc-network init
-terraform -chdir vpc-network apply
-
-# EKS cluster
-export TF_WORKSPACE="$PROJECT-eks-cluster"
-terraform -chdir eks-cluster init
-terraform -chdir eks-cluster apply
-
-# TODO add other components
-```
