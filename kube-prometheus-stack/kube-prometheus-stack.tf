@@ -14,8 +14,6 @@ resource "helm_release" "kube_prometheus_stack" {
   name      = local.release_name
   namespace = local.namespace
 
-  create_namespace = true
-
   wait          = true
   wait_for_jobs = true
 
