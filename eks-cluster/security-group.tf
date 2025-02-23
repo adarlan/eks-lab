@@ -19,8 +19,4 @@ resource "aws_security_group" "cluster_security_group" {
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
-
-  tags = {
-    Name = local.cluster_security_group_name
-  }
 }

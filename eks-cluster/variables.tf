@@ -1,11 +1,9 @@
-variable "aws_provider_config" {
-  type = object({
-    default_tags = map(string)
-    region       = string
-    access_key   = string
-    secret_key   = string
-  })
-  sensitive = true
+variable "aws_region" {
+  type = string
+}
+
+variable "aws_default_tags" {
+  type = map(string)
 }
 
 variable "project" {
@@ -20,6 +18,10 @@ variable "cluster_administrators" {
   description = "IAM users who will be given the cluster administrator policy"
   type        = list(string)
   default     = []
+}
+
+variable "cluster_admin_roles" {
+  type = list(string)
 }
 
 variable "instance_type" {

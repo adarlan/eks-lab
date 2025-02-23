@@ -34,18 +34,10 @@ resource "aws_eks_cluster" "cluster" {
   }
 
   access_config {
-
     authentication_mode = "API"
-    # The authentication mode for the cluster.
-    # Valid values are:
-    # - CONFIG_MAP
-    # - API
-    # - API_AND_CONFIG_MAP
 
     bootstrap_cluster_creator_admin_permissions = false
-    # Whether or not to bootstrap the access config values to the cluster.
-    # Default is true.
     # It needs to be set to false because the user who creates the cluster
-    # is not the same user who will deploy tools to the cluster.
+    # is not the same user who will administrate and deploy components to the cluster.
   }
 }
