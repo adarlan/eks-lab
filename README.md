@@ -15,11 +15,11 @@ It automates __Kubernetes__ cluster setup using __Terraform__ and __Helm__, inte
 
 ## Prerequisites
 
-Ensure you have the following __cloud accounts__:
+Ensure you have the following __accounts__:
 
-- Amazon Web Services (AWS) - https://aws.amazon.com/
-- GitHub - https://github.com/
-- HashiCorp Cloud Platform (HCP) Terraform - https://app.terraform.io/
+- [Amazon Web Services (AWS)](https://aws.amazon.com/)
+- [GitHub](https://github.com/)
+- [HashiCorp Cloud Platform (HCP) Terraform](https://app.terraform.io/)
 
 You’ll also need their respective __CLI tools__ configured:
 
@@ -27,7 +27,7 @@ You’ll also need their respective __CLI tools__ configured:
 - `gh`
 - `terraform`
 
-Additionally, you need a __registered domain__, which can be with any registrar, as long as you have a __Route 53 hosted zone__ set up as the DNS server.
+Additionally, you need a __registered domain__, which can be with any registrar, as long as you have a __Route 53 hosted zone__ set up as the DNS service.
 
 ## Getting Started
 
@@ -47,7 +47,7 @@ You can do this manually or automate the process using a script.
 
 #### Option 1: Manual Configuration
 
-Edit the `terraform.tfvars` files and replace placeholders following this pattern: `<[A-Z_]+>`.
+Edit the `terraform.tfvars` files and replace all placeholders.
 
 Example:
 
@@ -59,7 +59,7 @@ Example:
 + cluster_name = "eks-lab"
 ```
 
-To find all placeholders, search for `<[A-Z_]+>` across the repository.
+To find all placeholders, search for `<[A-Z_]+>` pattern across the repository.
 
 #### Option 2: Automated Configuration
 
@@ -81,11 +81,11 @@ Using `terraform.auto.tfvars` ensures Terraform picks up the correct configurati
 
 The `cloud-setup` directory contains Terraform configurations to integrate AWS, GitHub and HCP Terraform.
 
-This setup includes:
+This setup includes configuring the following resources:
 
-- Creating an HCP Terraform project, workspaces, variables, and token
-- Configuring AWS IAM roles and OIDC providers
-- Setting up GitHub Actions variables and secrets
+- HCP Terraform project, workspaces, variables, and token
+- AWS IAM roles and OIDC providers
+- GitHub Actions variables and secrets
 
 Run the following commands to apply these configurations:
 
@@ -94,7 +94,7 @@ terraform -chdir=cloud-setup init
 terraform -chdir=cloud-setup apply
 ```
 
-### Deploy
+### 4. Deploy
 
 You're now ready to:
 
@@ -116,3 +116,4 @@ To deploy, go to your GitHub repository:
 - Monitor metrics using Grafana and Prometheus
 - Automate further deployments using Argo CD
 - Experiment with Kubernetes workloads
+- Destroy to avoid unnecessary costs
