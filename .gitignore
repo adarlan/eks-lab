@@ -7,7 +7,6 @@ terraform.tfstate.*.backup
 terraform.tfstate.d
 terraform.auto.tfvars
 
-.env
-
+*.env
 *-tls.json
 *.bak
