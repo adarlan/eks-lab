@@ -1,0 +1,3 @@
+this app uploads files to s3 bucket
+the bucket will be created with crossplane
+configure pod identity to give access to the bucket
