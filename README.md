@@ -10,7 +10,9 @@ __Argo CD__ for continuous deployment,
 __Prometheus__ for metrics scraping,
 and __Grafana__ for dashboard visualization.
 
-## Requirements
+## Setup
+
+### Requirements
 
 Cloud platform accounts:
 
@@ -18,14 +20,11 @@ Cloud platform accounts:
 - GitHub account
 - HashiCorp Cloud Platform (HCP) Terraform account
 
-CLI tools installed:
+And their respective CLIs configure to access the accounts:
 
-- `aws` - AWS CLI configured with AWS IAM user credentials
-- `gh` - GitHub CLI configured with GitHub user credentials
-- `terraform` - Terraform CLI configured with HCP Terraform user credentials
-- `kubectl`
-- `helm`
-- `argocd`
+- `aws`
+- `gh`
+- `terraform`
 
 ## Setup
 
@@ -46,18 +45,16 @@ cd eks-lab
 
 Create an `.env` file with some basic configurations.
 
-This command will help you create the `.env` file quickly:
+This script will help you create the `.env` file quickly:
 
 ```shell
-./setup.sh .env
+./configure-dot-env.sh
 ```
 
-This is how your `.env` file will look like:
+If you prefer to create it manually, this is how your `.env` file should look like:
 
 ```shell
 PROJECT="eks-lab"
-AWS_PROFILE="default"
-AWS_IAM_USER="john-doe"
 AWS_REGION="us-east-1"
 DOMAIN="example.com"
 APPLICATION_HOST="app.example.com"
@@ -77,11 +74,13 @@ They contain a `terraform.tfvars` file with some placeholders.
 You need to generate a `terraform.auto.tfvars` with placeholders replaced by the values configured on the `.env` file.
 When a Terraform configuration contains both `terraform.tfvars` and `terraform.auto.tfvars` files, `terraform.auto.tfvars` takes precedence.
 
-This command will help you generate the `terraform.auto.tfvars` files quickly:
+This script will help you generate the `terraform.auto.tfvars` files quickly:
 
 ```shell
-./setup.sh .tfvars
+./generate-terraform-auto-tfvars.sh
 ```
+
+If you prefer, instead of automatically generating these files, you can manually edit the terraform.tfvars files directly and replace the placeholders.
 
 ### Cloud Setup
 
