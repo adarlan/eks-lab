@@ -1,23 +1,3 @@
-terraform {
-  required_version = "1.10.5"
-
-  cloud {
-    # organization = "<ORGANIZATION>"
-    # workspaces { name = "<PROJECT>-namespace-governance" }
-  }
-
-  required_providers {
-    aws = {
-      source  = "hashicorp/aws"
-      version = "5.86.1"
-    }
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "2.35.1"
-    }
-  }
-}
-
 provider "aws" {
   region = var.aws_region
 
