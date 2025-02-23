@@ -1,0 +1,7 @@
+add terraform configuration to backup and restore tls secrets
+using ssm parameters or secrets manager
+the cert manager release will depend on this resource
+prevent/ignore destroy
+but we would need to apply this again after the certificates been issued
+well, at least it can do the restore part
+the backup part will be a local script and gha workflow

@@ -8,12 +8,10 @@ locals {
 # -----------------------------------------------------------------------------
 
 resource "helm_release" "cert_manager" {
-  # depends_on = [kubernetes_namespace.namespace]
+  depends_on = [kubernetes_manifest.tls_secret]
 
   name      = local.release_name
   namespace = local.namespace
-
-  create_namespace = true # TODO
 
   repository = "https://charts.jetstack.io"
   chart      = "cert-manager"
