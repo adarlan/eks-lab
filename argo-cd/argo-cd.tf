@@ -9,8 +9,6 @@ resource "helm_release" "argo_cd" {
   name      = local.argocd_release_name
   namespace = local.argocd_namespace
 
-  create_namespace = true # TODO
-
   repository = "https://argoproj.github.io/argo-helm"
   chart      = "argo-cd"
   version    = "6.4.1"
@@ -35,6 +33,7 @@ resource "helm_release" "argo_cd" {
 
     crds = {
       keep = true
+      # TODO disable
     }
 
     global = {
