@@ -1,96 +1,93 @@
 # EKS Lab
 
-An __Amazon EKS__ experimentation project, packed with open-source tools and example applications.
+An __Amazon EKS__ experimentation project packed with open-source tools and example applications.
+
 It automates __Kubernetes__ cluster setup using __Terraform__ and __Helm__, integrating:
-__Amazon VPC__ for networking,
-__Amazon Route 53__ for DNS management,
-__Ingress-Nginx__ for traffic routing,
-__Cert-Manager__ for automated TLS certificate issuance,
-__Argo CD__ for continuous deployment,
-__Prometheus__ for metrics scraping,
-and __Grafana__ for dashboard visualization.
 
-## Requirements
+- __Amazon VPC__ for networking
+- __Amazon Route 53__ for DNS management
+- __Ingress-Nginx__ for traffic routing
+- __Cert-Manager__ for automated TLS certificate issuance
+- __Prometheus__ for metrics scraping
+- __Grafana__ for dashboard visualization
+- __GitHub Actions__ for deployment automation
+- __Argo CD__ for continuous deployment
 
-Cloud platform accounts:
+## Prerequisites
 
-- Amazon Web Services (AWS) account
-- GitHub account
-- HashiCorp Cloud Platform (HCP) Terraform account
+Ensure you have the following __cloud accounts__:
 
-CLI tools installed:
+- Amazon Web Services (AWS) - https://aws.amazon.com/
+- GitHub - https://github.com/
+- HashiCorp Cloud Platform (HCP) Terraform - https://app.terraform.io/
 
-- `aws` - AWS CLI configured with AWS IAM user credentials
-- `gh` - GitHub CLI configured with GitHub user credentials
-- `terraform` - Terraform CLI configured with HCP Terraform user credentials
-- `kubectl`
-- `helm`
-- `argocd`
+You’ll also need their respective __CLI tools__ configured:
 
-## Setup
+- `aws`
+- `gh`
+- `terraform`
 
-### Fork & Clone
+Additionally, you need a __registered domain__, which can be with any registrar, as long as you have a __Route 53 hosted zone__ set up as the DNS server.
 
-Fork this repository to your GitHub account and clone your fork on your computer.
-As this project requires configurations and credentials to access your cloud platform accounts,
-you need to work on your own repository.
+## Getting Started
 
-Example (cloning the repository with GitHub CLI, but feel free to clone with git over HTTPS or SSH):
+### 1. Fork & Clone the Repository
+
+Since this project requires configurations for your cloud accounts, work on your own fork.
 
 ```shell
-gh repo clone GITHUB_USER/eks-lab
+gh repo fork adarlan/eks-lab --clone
 cd eks-lab
 ```
 
-### Configure `.env` File
+### 2. Terraform Configuration
 
-Create an `.env` file with some basic configurations.
+The Terraform configurations in this repository contain placeholders in `terraform.tfvars` that must be replaced with actual values.
+You can do this manually or automate the process using a script.
 
-This command will help you create the `.env` file quickly:
+#### Option 1: Manual Configuration
 
-```shell
-./setup.sh .env
+Edit the `terraform.tfvars` files and replace placeholders following this pattern: `<[A-Z_]+>`.
+
+Example:
+
+```diff
+- aws_region = "<AWS_REGION>"
++ aws_region = "us-east-1"
+
+- cluster_name = "<CLUSTER_NAME>"
++ cluster_name = "eks-lab"
 ```
 
-This is how your `.env` file will look like:
+To find all placeholders, search for `<[A-Z_]+>` across the repository.
+
+#### Option 2: Automated Configuration
+
+Run the following script to generate `terraform.auto.tfvars` files, replacing the placeholder values from `terraform.tfvars`:
 
 ```shell
-PROJECT="eks-lab"
-AWS_PROFILE="default"
-AWS_IAM_USER="john-doe"
-AWS_REGION="us-east-1"
-DOMAIN="example.com"
-APPLICATION_HOST="app.example.com"
-ACME_EMAIL="john.doe@example.com"
-ORGANIZATION="john-doe"
-CLUSTER_NAME="eks-lab"
-GITHUB_REPOSITORY="eks-lab"
-ARGOCD_HOST="argocd.example.com"
-GRAFANA_HOST="grafana.example.com"
-PROMETHEUS_HOST="prometheus.example.com"
+./generate-terraform-auto-tfvars.sh
 ```
 
-### Generate `terraform.auto.tfvars` Files
+This script will:
 
-This project has multiple Terraform configurations.
-They contain a `terraform.tfvars` file with some placeholders.
-You need to generate a `terraform.auto.tfvars` with placeholders replaced by the values configured on the `.env` file.
-When a Terraform configuration contains both `terraform.tfvars` and `terraform.auto.tfvars` files, `terraform.auto.tfvars` takes precedence.
+- Prompt you for any required information
+- Save your inputs in a `.env` file for future runs
+- Generate `terraform.auto.tfvars` files with the correct values
 
-This command will help you generate the `terraform.auto.tfvars` files quickly:
+Using `terraform.auto.tfvars` ensures Terraform picks up the correct configuration automatically, without modifying `terraform.tfvars` manually.
 
-```shell
-./setup.sh .tfvars
-```
+### 3. Cloud Setup
 
-### Cloud Setup
+The `cloud-setup` directory contains Terraform configurations to integrate AWS, GitHub and HCP Terraform.
 
-The `cloud-setup` directory contains the Terraform configuration for
-HCP Terraform project, workspaces, variables and token, AWS IAM roles and OIDC provider, and GitHub Actions secrets.
+This setup includes:
 
-These resources are the configurations and credentials necessary to integrate the 3 platforms.
+- Creating an HCP Terraform project, workspaces, variables, and token
+- Configuring AWS IAM roles and OIDC providers
+- Setting up GitHub Actions variables and secrets
 
-Run the commands below to create these resources:
+Run the following commands to apply these configurations:
 
 ```shell
 terraform -chdir=cloud-setup init
@@ -99,36 +96,23 @@ terraform -chdir=cloud-setup apply
 
 ### Deploy
 
-You're all set to create the EKS cluster along with all the required infrastructure (VPC network, Route53 DNS, etc),
-install tools (ingress-nginx, cert-manager, etc),
-and deploy example applications.
+You're now ready to:
 
-You can do this by either with GitHub Actions
-or executing commands locally.
+- Create the EKS cluster and required infrastructure (VPC, Route 53, etc.)
+- Install necessary tools (Ingress-Nginx, Cert-Manager, etc.)
+- Deploy example applications
 
-#### Deploy with GitHub Actions
+If you have any changes, __commit and push__ them before proceeding.
 
-On your repository on GitHub, navigate to the Actions tab,
-select the Deploy workflow on the left menu,
-and click "Run workflow" on the right.
+To deploy, go to your GitHub repository:
 
-<!-- TODO screenshots -->
+- Navigate to the __Actions__ tab
+- Select the __Deploy__ workflow
+- Click __Run workflow__
 
-#### Deploy with local commands
+### Next Steps
 
-```shell
-source .env
-export TF_CLOUD_ORGANIZATION="$ORGANIZATION"
-
-# VPC network
-export TF_WORKSPACE="$PROJECT-vpc-network"
-terraform -chdir vpc-network init
-terraform -chdir vpc-network apply
-
-# EKS cluster
-export TF_WORKSPACE="$PROJECT-eks-cluster"
-terraform -chdir eks-cluster init
-terraform -chdir eks-cluster apply
-
-# TODO add other components
-```
+- Access your applications via the configured domain
+- Monitor metrics using Grafana and Prometheus
+- Automate further deployments using Argo CD
+- Experiment with Kubernetes workloads
