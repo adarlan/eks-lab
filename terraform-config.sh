@@ -40,6 +40,7 @@ done
 
 if $no_prompt && [ ! -f terraform-config.env ]; then
     echo; echo "[ERROR] Missing terraform-config.env file"
+    exit 1
 fi
 
 if [ -f terraform-config.env ]; then
