@@ -12,10 +12,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Add terraform-config.env
-        run: echo "${{ vars.TERRAFORM_CONFIG_ENV }}" > terraform-config.env
-      - name: Run terraform-config.sh
-        run: ./terraform-config.sh --dir vpc-network --no-prompt
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
         with:
@@ -23,13 +19,13 @@ jobs:
           cli_config_credentials_token: "${{ secrets.TFE_TOKEN }}"
       - name: Terraform init
         run: |
-          if [ -f vpc-network/terraform.cloud.env ]; then
-            source vpc-network/terraform.cloud.env
-          fi
+          export TF_CLOUD_ORGANIZATION="${{ vars.TF_CLOUD_ORGANIZATION }}"
+          export TF_CLOUD_PROJECT="${{ vars.TF_CLOUD_PROJECT }}"
+          export TF_WORKSPACE="${{ vars.TF_CLOUD_PROJECT }}-vpc-network"
           terraform -chdir=vpc-network init
       - name: Terraform plan
         run: |
-          if [ -f vpc-network/terraform.cloud.env ]; then
-            source vpc-network/terraform.cloud.env
-          fi
-          terraform -chdir=vpc-network plan -input=false
+          export TF_CLOUD_ORGANIZATION="${{ vars.TF_CLOUD_ORGANIZATION }}"
+          export TF_CLOUD_PROJECT="${{ vars.TF_CLOUD_PROJECT }}"
+          export TF_WORKSPACE="${{ vars.TF_CLOUD_PROJECT }}-vpc-network"
+          terraform -chdir=vpc-network plan -input=false -compact-warnings
