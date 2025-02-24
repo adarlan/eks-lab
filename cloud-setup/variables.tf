@@ -29,3 +29,7 @@ variable "aws_profile" {
 variable "github_repository" {
   type = string
 }
+
+variable "terraform_config_env" {
+  type = string
+}

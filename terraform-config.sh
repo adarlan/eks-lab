@@ -160,13 +160,26 @@ generate_terraform_auto_tfvars() {
     variables=$(grep -E -o '^[A-Z0-9_]+' terraform-config.env)
     for variable in $variables; do
         value="${!variable}"
-
         if grep -q "<$variable>" $dir/terraform.auto.tfvars > /dev/null; then
             echo "  - Replacing placeholder: <$variable> ---> $value"
             sed -i.bak -e "s|<$variable>|$value|g" $dir/terraform.auto.tfvars
             rm $dir/terraform.auto.tfvars.bak
         fi
     done
+
+    # TODO need this if --hardcode?
+    if [ "$dir" = "cloud-setup" ]; then
+        value=$(grep -E '^[A-Z0-9_]+=.+$' terraform-config.env)
+        echo "  - Replacing placeholder: <TERRAFORM_CONFIG_ENV> ---> $(echo "$value" | sed ':a;N;$!ba;s/\n/\\n/g')"
+        awk -v value="$value" '{ 
+            if ($0 == "<TERRAFORM_CONFIG_ENV>") {
+                print value;
+            } else {
+                print;
+            }
+        }' $dir/terraform.auto.tfvars > $dir/terraform.auto.tfvars.tmp
+        mv $dir/terraform.auto.tfvars.tmp $dir/terraform.auto.tfvars
+    fi
 }
 
 if [ -z "$dir" ]; then

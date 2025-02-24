@@ -10,6 +10,10 @@ aws_profile = "<AWS_PROFILE>"
 
 github_repository = "<GITHUB_REPOSITORY>"
 
+terraform_config_env = <<EOT
+<TERRAFORM_CONFIG_ENV>
+EOT
+
 aws_permissions = {
 
   vpc-network = ["ec2:*"]
