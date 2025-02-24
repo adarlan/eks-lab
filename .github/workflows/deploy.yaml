@@ -1,0 +1,11 @@
+name: Deploy
+
+on:
+  workflow_dispatch:
+
+jobs:
+  vpc-network:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Terraform config
+        run: ./terraform-config.sh --no-prompt
