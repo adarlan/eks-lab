@@ -17,16 +17,15 @@ jobs:
         uses: hashicorp/setup-terraform@v3
         with:
           terraform_version: "1.10.5"
+          cli_config_credentials_token: "${{ secrets.TFE_TOKEN }}"
       - name: Terraform init
         run: |
-          export TFE_TOKEN="${{ secrets.TFE_TOKEN }}"
           if [ -f vpc-network/terraform.cloud.env ]; then
             source vpc-network/terraform.cloud.env
           fi
           terraform -chdir=vpc-network init
       - name: Terraform apply
         run: |
-          export TFE_TOKEN="${{ secrets.TFE_TOKEN }}"
           if [ -f vpc-network/terraform.cloud.env ]; then
             source vpc-network/terraform.cloud.env
           fi
