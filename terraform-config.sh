@@ -38,6 +38,10 @@ for arg in "$@"; do
     fi
 done
 
+if $no_prompt && [ ! -f terraform-config.env ]; then
+    echo; echo "[ERROR] Missing terraform-config.env file"
+fi
+
 if [ -f terraform-config.env ]; then
     source terraform-config.env
 else
