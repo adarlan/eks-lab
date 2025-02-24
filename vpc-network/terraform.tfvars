@@ -1,11 +1,3 @@
-aws_region = "<AWS_REGION>"
-
-aws_default_tags = {
-  project = "<PROJECT>"
-}
-
-cluster_name = "<CLUSTER_NAME>"
-
 vpc_cidr_block            = "10.0.0.0/16"
 max_selected_zones        = 2
 subnet_cidr_block_newbits = 8
