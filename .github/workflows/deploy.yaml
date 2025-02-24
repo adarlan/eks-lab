@@ -9,5 +9,7 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: terraform-config.env
+        run: echo "${{ vars.TERRAFORM_CONFIG_ENV }}" > terraform-config.env
       - name: Terraform config
         run: ./terraform-config.sh --dir vpc-network --no-prompt
