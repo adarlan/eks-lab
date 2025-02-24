@@ -7,5 +7,7 @@ jobs:
   vpc-network:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Terraform config
-        run: ./terraform-config.sh --no-prompt
+        run: ./terraform-config.sh --dir vpc-network --no-prompt
