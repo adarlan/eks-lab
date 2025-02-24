@@ -1,0 +1,35 @@
+name: Terraform plan
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+
+jobs:
+  vpc-network:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Add terraform-config.env
+        run: echo "${{ vars.TERRAFORM_CONFIG_ENV }}" > terraform-config.env
+      - name: Run terraform-config.sh
+        run: ./terraform-config.sh --dir vpc-network --no-prompt
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+          cli_config_credentials_token: "${{ secrets.TFE_TOKEN }}"
+      - name: Terraform init
+        run: |
+          if [ -f vpc-network/terraform.cloud.env ]; then
+            source vpc-network/terraform.cloud.env
+          fi
+          terraform -chdir=vpc-network init
+      - name: Terraform plan
+        run: |
+          if [ -f vpc-network/terraform.cloud.env ]; then
+            source vpc-network/terraform.cloud.env
+          fi
+          terraform -chdir=vpc-network plan -input=false
