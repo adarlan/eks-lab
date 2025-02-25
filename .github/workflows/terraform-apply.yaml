@@ -29,4 +29,4 @@ jobs:
           export TF_CLOUD_ORGANIZATION="${{ vars.TF_CLOUD_ORGANIZATION }}"
           export TF_CLOUD_PROJECT="${{ vars.TF_CLOUD_PROJECT }}"
           export TF_WORKSPACE="${{ vars.TF_CLOUD_PROJECT }}-${{ inputs.dir }}"
-          terraform -chdir=${{ inputs.dir }} apply -input=false
+          terraform -chdir=${{ inputs.dir }} apply -input=false -auto-approve
