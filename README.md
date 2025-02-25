@@ -35,7 +35,7 @@ You'll need a __registered domain__, which can be with any registrar. However, y
 
 ## Getting Started
 
-### 1. Fork & Clone the Repository 📁
+### 1. Fork & Clone the Repository
 
 Since this project requires configurations for your cloud accounts, it's recommended to work on your own fork.
 
@@ -50,30 +50,28 @@ This repository is organized into multiple modules, each with its own independen
 
 It provisions:
 
-- HCP Terraform workspaces, variables, and API token, enabling GitHub Actions to run Terraform commands remotely.
-- AWS IAM roles and OIDC providers, granting HCP Terraform workspaces and GitHub Actions the necessary permissions to manage AWS resources.
+- AWS IAM roles and OIDC providers, granting HCP Terraform and GitHub Actions the necessary permissions to manage AWS resources.
+- HCP Terraform workspaces, variables, and API tokens, enabling GitHub Actions to run Terraform commands remotely.
 - GitHub secrets and variables, supplying credentials and configuration details for the GitHub Actions workflows.
-
-#### Configuration
 
 Before applying the setup, create a `cloud-setup/terraform.tfvars` file with the following values, replacing them as needed:
 
 ```conf
-project           = "eks-lab"
-cluster_name      = "eks-lab"
-github_repository = "eks-lab"
-organization      = "example-organization"
-team              = "owners"
-aws_region        = "us-east-1"
-domain            = "example.com"
-application_host  = "app.example.com"
-argocd_host       = "argocd.example.com"
-grafana_host      = "grafana.example.com"
-prometheus_host   = "prometheus.example.com"
-acme_email        = "example@example.com"
-```
+github_repository          = "eks-lab"
+aws_region                 = "us-east-1"
+hcp_terraform_organization = "example-org"
 
-#### Applying the Configuration
+domain = "example.com"
+
+hosts = {
+  application = "app.example.com"
+  argocd      = "argocd.example.com"
+  grafana     = "grafana.example.com"
+  prometheus  = "prometheus.example.com"
+}
+
+acme_email = "example@example.com"
+```
 
 Run the following commands to initialize and apply the `cloud-setup` module:
 
@@ -84,19 +82,29 @@ terraform -chdir=cloud-setup apply
 
 This applies the `cloud-setup` configuration using the current user's credentials and a local Terraform backend. However, this is the only module that runs locally — all other modules are applied via GitHub Actions and managed through HCP Terraform.
 
-### 3. Deploy 🚀
+### 3. Deploy Infrastructure 🏗️
 
-At this point, you're ready to:
+Now that the foundational setup is complete, you can deploy the core infrastructure components:
 
-- Create the EKS cluster and supporting infrastructure (VPC, Route 53, etc.)
-- Install essential tools (Ingress-Nginx, Cert-Manager, etc.)
-- Deploy example applications
+- Provision the EKS cluster and supporting resources (VPC, Route 53, etc.)
+- Install essential tools and services (Ingress-Nginx, Cert-Manager, etc.)
 
-Start the deployment:
+To start the deployment:
 
 - Go to your GitHub repository
 - Navigate to the __Actions__ tab
-- Select the __Deploy__ workflow
+- Select the __Deploy Infrastructure__ workflow
+- Click __Run workflow__
+
+### 4. Deploy Applications 📦
+
+With the infrastructure in place, you can now deploy example applications to the cluster.
+
+To start the deployment:
+
+- Go to your GitHub repository
+- Navigate to the __Actions__ tab
+- Select the __Deploy Applications__ workflow
 - Click __Run workflow__
 
 ### Next Steps 🎯
