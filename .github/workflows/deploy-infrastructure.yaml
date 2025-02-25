@@ -47,8 +47,8 @@ jobs:
       - name: Apply CRDs
         run: |
           kubectl version
-          # kubectl config current-context
-          # kubectl apply --server-side -k crds/
+          kubectl config current-context
+          kubectl apply --server-side -k crds/
 
   ingress-nginx:
     needs: [namespace-governance]
