@@ -9,9 +9,11 @@ jobs:
     uses: ./.github/workflows/terraform-apply.yaml
     with:
       dir: vpc-network
+    secrets: inherit
 
   eks-cluster:
     needs: [vpc-network]
     uses: ./.github/workflows/terraform-apply.yaml
     with:
       dir: eks-cluster
+    secrets: inherit
