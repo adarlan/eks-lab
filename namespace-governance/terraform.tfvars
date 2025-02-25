@@ -1,11 +1,3 @@
-aws_region = "<AWS_REGION>"
-
-aws_default_tags = {
-  project = "<PROJECT>"
-}
-
-cluster_name = "<CLUSTER_NAME>"
-
 namespaces = {
 
   default = {
