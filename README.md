@@ -92,8 +92,6 @@ At this point, you're ready to:
 - Install essential tools (Ingress-Nginx, Cert-Manager, etc.)
 - Deploy example applications
 
-Before proceeding, make sure to commit and push any changes.
-
 Start the deployment:
 
 - Go to your GitHub repository
