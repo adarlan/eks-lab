@@ -35,7 +35,7 @@ You'll need a __registered domain__, which can be with any registrar. However, y
 
 ## Getting Started
 
-### 1️. Fork & Clone the Repository 📁
+### 1. Fork & Clone the Repository 📁
 
 Since this project requires configurations for your cloud accounts, it's recommended to work on your own fork.
 
@@ -44,7 +44,7 @@ gh repo fork adarlan/eks-lab --clone
 cd eks-lab
 ```
 
-### 2️. Cloud Setup 🌥️
+### 2. Cloud Setup 🌥️
 
 This repository is organized into multiple modules, each with its own independent Terraform configuration. Among them, `cloud-setup` is a foundational module. While it doesn’t provision the cluster infrastructure or deploy workloads, it establishes the necessary integrations between AWS, GitHub, and HCP Terraform, ensuring that all other modules have the required configurations, credentials, and permissions to function correctly.
 
@@ -84,7 +84,7 @@ terraform -chdir=cloud-setup apply
 
 This applies the `cloud-setup` configuration using the current user's credentials and a local Terraform backend. However, this is the only module that runs locally — all other modules are applied via GitHub Actions and managed through HCP Terraform.
 
-### 3️. Deploy 🚀
+### 3. Deploy 🚀
 
 At this point, you're ready to:
 
