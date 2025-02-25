@@ -17,3 +17,36 @@ jobs:
     with:
       dir: eks-cluster
     secrets: inherit
+
+  namespace-governance:
+    needs: [eks-cluster]
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: namespace-governance
+    secrets: inherit
+
+  crds:
+    needs: [eks-cluster]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      # TODO Setup AWS, Update kubeconfig
+
+  ingress-nginx:
+    needs: [namespace-governance]
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: ingress-nginx
+    secrets: inherit
+
+# ingress-nginx
+# # route53-dns
+# cert-manager
+# kube-prometheus-stack
+# argo-cd
+# hello-world
+# # argocd-applications
+
+# # TODO need to wait until all certificates are issued
+# # tls-secrets-backup
