@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy Infrastructure
 
 on:
   workflow_dispatch:
@@ -28,10 +28,22 @@ jobs:
   crds:
     needs: [eks-cluster]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write # This is required for requesting the JWT
+      contents: read  # This is required for actions/checkout
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      # TODO Setup AWS, Update kubeconfig
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-session-name: crds # TODO add a more descriptive name? include owner? repo? workflow name?
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Update Kubeconfig
+        run: aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }}
+      - name: Apply CRDs
+        run: kubectl apply --server-side -k crds/
 
   ingress-nginx:
     needs: [namespace-governance]
@@ -40,7 +52,6 @@ jobs:
       dir: ingress-nginx
     secrets: inherit
 
-# ingress-nginx
 # # route53-dns
 # cert-manager
 # kube-prometheus-stack
