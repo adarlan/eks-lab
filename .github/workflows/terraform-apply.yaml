@@ -1,13 +1,14 @@
-name: Terraform plan
+name: Terraform Apply
 
 on:
-  workflow_dispatch:
-  push:
-    branches:
-      - main
+  workflow_call:
+    inputs:
+      dir:
+        type: string
+        required: true
 
 jobs:
-  vpc-network:
+  terraform-apply:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -17,15 +18,15 @@ jobs:
         with:
           terraform_version: "1.10.5"
           cli_config_credentials_token: "${{ secrets.TFE_TOKEN }}"
-      - name: Terraform init
+      - name: Terraform Init
         run: |
           export TF_CLOUD_ORGANIZATION="${{ vars.TF_CLOUD_ORGANIZATION }}"
           export TF_CLOUD_PROJECT="${{ vars.TF_CLOUD_PROJECT }}"
-          export TF_WORKSPACE="${{ vars.TF_CLOUD_PROJECT }}-vpc-network"
-          terraform -chdir=vpc-network init
-      - name: Terraform plan
+          export TF_WORKSPACE="${{ vars.TF_CLOUD_PROJECT }}-${{ inputs.dir }}"
+          terraform -chdir=${{ inputs.dir }} init
+      - name: Terraform Apply
         run: |
           export TF_CLOUD_ORGANIZATION="${{ vars.TF_CLOUD_ORGANIZATION }}"
           export TF_CLOUD_PROJECT="${{ vars.TF_CLOUD_PROJECT }}"
-          export TF_WORKSPACE="${{ vars.TF_CLOUD_PROJECT }}-vpc-network"
-          terraform -chdir=vpc-network plan -input=false -compact-warnings
+          export TF_WORKSPACE="${{ vars.TF_CLOUD_PROJECT }}-${{ inputs.dir }}"
+          terraform -chdir=${{ inputs.dir }} apply -input=false
