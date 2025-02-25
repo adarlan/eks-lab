@@ -43,7 +43,10 @@ jobs:
       - name: Update Kubeconfig
         run: aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }}
       - name: Apply CRDs
-        run: kubectl apply --server-side -k crds/
+        run: |
+          kubectl version
+          kubectl config current-context
+          kubectl apply --server-side -k crds/
 
   ingress-nginx:
     needs: [namespace-governance]
