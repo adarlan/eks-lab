@@ -50,9 +50,9 @@ This repository is organized into multiple modules, each with its own independen
 
 It provisions:
 
-- An HCP Terraform project, workspaces, variables, and API token, enabling GitHub Actions to run Terraform commands remotely.
+- HCP Terraform workspaces, variables, and API token, enabling GitHub Actions to run Terraform commands remotely.
 - AWS IAM roles and OIDC providers, granting HCP Terraform workspaces and GitHub Actions the necessary permissions to manage AWS resources.
-- GitHub Actions secrets and variables, supplying credentials and configuration details for the deployment workflow.
+- GitHub secrets and variables, supplying credentials and configuration details for the GitHub Actions workflows.
 
 #### Configuration
 
