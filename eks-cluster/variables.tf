@@ -15,13 +15,13 @@ variable "cluster_name" {
 }
 
 variable "cluster_administrators" {
-  description = "IAM users who will be given the cluster administrator policy"
-  type        = list(string)
-  default     = []
-}
-
-variable "cluster_admin_roles" {
-  type = list(string)
+  description = "IAM principals who will be given the cluster administrator policy"
+  type = object({
+    iam_user_names     = optional(list(string), [])
+    iam_role_names     = optional(list(string), [])
+    iam_principal_arns = optional(list(string), [])
+  })
+  default = {}
 }
 
 variable "instance_type" {
