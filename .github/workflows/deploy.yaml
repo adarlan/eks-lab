@@ -6,12 +6,12 @@ on:
 jobs:
 
   vpc-network:
-    uses: .github/workflows/terraform-apply.yaml
+    uses: .github/workflows/terraform-apply.yaml@main
     with:
       dir: vpc-network
 
   eks-cluster:
     needs: [vpc-network]
-    uses: .github/workflows/terraform-apply.yaml
+    uses: .github/workflows/terraform-apply.yaml@main
     with:
       dir: eks-cluster
