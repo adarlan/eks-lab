@@ -41,7 +41,9 @@ jobs:
           role-session-name: crds # TODO add a more descriptive name? include owner? repo? workflow name?
           aws-region: ${{ vars.AWS_REGION }}
       - name: Update Kubeconfig
-        run: aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }}
+        run: |
+          aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }}
+          kubectl version
       - name: Apply CRDs
         run: |
           kubectl version
