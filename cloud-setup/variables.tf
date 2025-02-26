@@ -1,35 +1,29 @@
-variable "organization" {
-  type = string
-}
-
-variable "project" {
-  type = string
-}
-
-variable "aws_permissions" {
-  type = map(list(string))
-}
-
-variable "team" {
-  type = string
+variable "github_repository" {
+  type        = string
+  description = "GitHub repository"
 }
 
 variable "aws_region" {
-  type = string
+  type        = string
+  description = "AWS region"
 }
 
-variable "aws_default_tags" {
+variable "hcp_terraform_organization" {
+  type        = string
+  description = "HCP Terraform organization"
+}
+
+variable "domain" {
+  type        = string
+  description = "Registered domain"
+}
+
+variable "hosts" {
   type = map(string)
+  description = "Hosts for applications and tools"
 }
 
-variable "aws_profile" {
-  type = string
-}
-
-variable "github_repository" {
-  type = string
-}
-
-variable "terraform_config_env" {
-  type = string
+variable "acme_email" {
+  type        = string
+  description = "ACME email"
 }

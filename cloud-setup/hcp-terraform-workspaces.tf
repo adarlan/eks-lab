@@ -1,21 +1,13 @@
 locals {
-  workspaces = {
-    for k, v in var.aws_permissions : "${var.project}-${k}" => {
-      aws_permissions = v
-    }
-  }
+  workspace_names = toset([for k, v in local.aws_permissions : "${tfe_project.project.name}-${k}"])
 }
 
 resource "tfe_workspace" "workspace" {
-  for_each = local.workspaces
+  for_each = local.workspace_names
 
-  name         = each.key
-  organization = var.organization
+  name         = each.value
+  organization = var.hcp_terraform_organization
   project_id   = tfe_project.project.id
-
-  lifecycle {
-    prevent_destroy = true
-  }
 }
 
 # TODO auto_destroy_at?
