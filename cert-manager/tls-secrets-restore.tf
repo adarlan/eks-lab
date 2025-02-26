@@ -19,6 +19,8 @@ data "aws_s3_object" "tls_secret" {
   key    = each.value
 }
 
+# TODO this is displaying the secret content on the terraform plan
+# check if there is any argument to define the manifest as sensitive
 resource "kubernetes_manifest" "tls_secret" {
   for_each = local.tls_secret_names
 
