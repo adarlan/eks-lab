@@ -27,28 +27,11 @@ jobs:
 
   crds:
     needs: [eks-cluster]
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write # This is required for requesting the JWT
-      contents: read  # This is required for actions/checkout
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
-          role-session-name: crds # TODO add a more descriptive name? include owner? repo? workflow name?
-          aws-region: ${{ vars.AWS_REGION }}
-      - name: Update Kubeconfig
-        run: |
-          aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }}
-          kubectl version
-      - name: Apply CRDs
-        run: |
-          kubectl version
-          kubectl config current-context
-          kubectl apply --server-side -k crds/
+    uses: ./.github/workflows/kubectl-apply.yaml
+    with:
+      dir: crds/
+      kustomize: true
+    secrets: inherit
 
   ingress-nginx:
     needs: [namespace-governance]
@@ -57,12 +40,23 @@ jobs:
       dir: ingress-nginx
     secrets: inherit
 
-# # route53-dns
-# cert-manager
-# kube-prometheus-stack
-# argo-cd
-# hello-world
-# # argocd-applications
+  kube-prometheus-stack:
+    needs: [namespace-governance, crds]
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: kube-prometheus-stack
+    secrets: inherit
 
-# # TODO need to wait until all certificates are issued
-# # tls-secrets-backup
+  cert-manager:
+    needs: [namespace-governance, crds]
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: cert-manager
+    secrets: inherit
+
+  argo-cd:
+    needs: [namespace-governance, crds]
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: argo-cd
+    secrets: inherit

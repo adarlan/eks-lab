@@ -1,0 +1,32 @@
+name: (kubectl-apply)
+
+on:
+  workflow_call:
+    inputs:
+      path:
+        type: string
+        required: true
+      kustomize:
+        type: boolean
+        default: false
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  kubectl-apply:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-session-name: kubectl-apply
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Update Kubeconfig
+        run: aws eks update-kubeconfig --name ${{ vars.EKS_CLUSTER_NAME }}
+      - name: Kubectl Apply
+        run: kubectl apply --server-side ${{ inputs.kustomize && '-k' || '-f' }} ${{ inputs.path }}
