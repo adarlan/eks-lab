@@ -31,6 +31,9 @@ jobs:
     with:
       path: crds/
       kustomize: true
+    permissions:
+      id-token: write
+      contents: read
     secrets: inherit
 
   ingress-nginx:
