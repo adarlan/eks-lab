@@ -17,21 +17,10 @@ It automates __Kubernetes__ cluster setup using __Terraform__ and __Helm__, inte
 
 Before getting started, ensure you have the following:
 
-### Accounts
-
-- [Amazon Web Services (AWS)](https://aws.amazon.com/)
-- [GitHub](https://github.com/)
-- [HashiCorp Cloud Platform (HCP) Terraform](https://app.terraform.io/)
-
-### CLI Tools
-
-- `aws`
-- `gh`
-- `terraform`
-
-### Domain & DNS
-
-You'll need a __registered domain__, which can be with any registrar. However, you must have an __Amazon Route 53 hosted zone__ set up as the DNS service.
+- [Amazon Web Services (AWS)](https://aws.amazon.com/) account with [`aws` (AWS CLI)] logged in to your account.
+- [GitHub](https://github.com/) account + `gh` ([GitHub CLI]) configured to access your account.
+- [HashiCorp Cloud Platform (HCP) Terraform](https://app.terraform.io/) account + `terraform` CLI loged in to your account.
+- A registered domain, with an [Amazon Route 53] hosted zone set up as the DNS service.
 
 ## Getting Started
 
