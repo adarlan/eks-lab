@@ -15,23 +15,12 @@ It automates __Kubernetes__ cluster setup using __Terraform__ and __Helm__, inte
 
 ## Prerequisites
 
-Before getting started, ensure you have the following:
+Before getting started, make sure you have the following:
 
-### Accounts
-
-- [Amazon Web Services (AWS)](https://aws.amazon.com/)
-- [GitHub](https://github.com/)
-- [HashiCorp Cloud Platform (HCP) Terraform](https://app.terraform.io/)
-
-### CLI Tools
-
-- `aws`
-- `gh`
-- `terraform`
-
-### Domain & DNS
-
-You'll need a __registered domain__, which can be with any registrar. However, you must have an __Amazon Route 53 hosted zone__ set up as the DNS service.
+- __GitHub__ account – [sign up](https://github.com/signup) or [log in](https://github.com/login) and ensure the `gh` CLI is [installed](https://github.com/cli/cli#installation) and [authenticated](https://cli.github.com/manual/gh_auth_login).
+- __AWS__ account – [sign up](https://portal.aws.amazon.com/billing/signup) or [log in](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin) and ensure the `aws` CLI is [installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [authenticated](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/configure/index.html).
+- __HCP Terraform__ account – [sign up](https://app.terraform.io/public/signup/account) or [log in](https://app.terraform.io/session) and ensure the `terraform` CLI is [installed](https://developer.hashicorp.com/terraform/install) and [authenticated](https://developer.hashicorp.com/terraform/cli/commands/login).
+- Registered __domain__ – Ensure you have a domain with an [Amazon Route 53 hosted zone set up for DNS management](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html).
 
 ## Getting Started
 
@@ -46,7 +35,7 @@ cd eks-lab
 
 ### 2. Cloud Setup 🌥️
 
-This repository is organized into multiple modules, each with its own independent Terraform configuration. Among them, `cloud-setup` is a foundational module. While it doesn’t provision the cluster infrastructure or deploy workloads, it establishes the necessary integrations between AWS, GitHub, and HCP Terraform, ensuring that all other modules have the required configurations, credentials, and permissions to function correctly.
+This repository is organized into multiple modules, each with its own independent configuration. Among them, `cloud-setup` is a foundational module. While it doesn’t provision the cluster infrastructure or deploy workloads, it establishes the necessary integrations between AWS, GitHub, and HCP Terraform, ensuring that all other modules have the required configurations, credentials, and permissions to function correctly.
 
 It provisions:
 
@@ -80,13 +69,15 @@ terraform -chdir=cloud-setup init
 terraform -chdir=cloud-setup apply
 ```
 
-This applies the `cloud-setup` configuration using the current user's credentials and a local Terraform backend. However, this is the only module that runs locally — all other modules are applied via GitHub Actions and managed through HCP Terraform.
+This applies the `cloud-setup` configuration using the current user's credentials and stores the Terraform state locally.
+However, this is the only module that runs locally — all other modules are applied via GitHub Actions and managed through HCP Terraform.
 
 ### 3. Deploy Infrastructure 🏗️
 
-Now that the foundational setup is complete, you can deploy the core infrastructure components:
+With the foundational setup complete, you're ready to deploy the core infrastructure components:
 
-- Provision the EKS cluster and supporting resources (VPC, Route 53, etc.)
+- Provision the EKS cluster along with supporting resources (VPC, Route 53, etc.).
+- Create Kubernetes namespaces and apply Custom Resource Definitions (CRDs).
 - Install essential tools and services (Ingress-Nginx, Cert-Manager, etc.)
 
 To start the deployment:
