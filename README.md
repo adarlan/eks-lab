@@ -87,6 +87,8 @@ To start the deployment:
 - Select the __Deploy Infrastructure__ workflow
 - Click __Run workflow__
 
+![Deploy Infrastructure](./docs/deploy-infrastructure.png)
+
 ### 4. Deploy Applications 📦
 
 With the infrastructure in place, you can now deploy example applications to the cluster.
