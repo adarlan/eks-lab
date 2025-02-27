@@ -17,10 +17,10 @@ It automates __Kubernetes__ cluster setup using __Terraform__ and __Helm__, inte
 
 Before getting started, make sure you have the following:
 
-- __GitHub__ account – [sign up](https://github.com/signup) or [log in](https://github.com/login) and ensure the `gh` CLI is [installed](https://github.com/cli/cli#installation) and [authenticated](https://cli.github.com/manual/gh_auth_login).
-- __AWS__ account – [sign up](https://portal.aws.amazon.com/billing/signup) or [log in](https://console.aws.amazon.com/console/home?nc2=h_ct&src=header-signin) and ensure the `aws` CLI is [installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [authenticated](https://awscli.amazonaws.com/v2/documentation/api/latest/reference/configure/index.html).
-- __HCP Terraform__ account – [sign up](https://app.terraform.io/public/signup/account) or [log in](https://app.terraform.io/session) and ensure the `terraform` CLI is [installed](https://developer.hashicorp.com/terraform/install) and [authenticated](https://developer.hashicorp.com/terraform/cli/commands/login).
-- Registered __domain__ – Ensure you have a domain with an [Amazon Route 53 hosted zone set up for DNS management](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-configuring.html).
+- __GitHub__ account + `gh` CLI installed and authenticated
+- __AWS__ account + `aws` CLI installed and authenticated
+- __HCP Terraform__ account + `terraform` CLI installed and authenticated
+- __Registered domain__ + __Amazon Route 53 hosted zone__ set up for DNS management
 
 ## Getting Started
 
@@ -86,6 +86,8 @@ To start the deployment:
 - Navigate to the __Actions__ tab
 - Select the __Deploy Infrastructure__ workflow
 - Click __Run workflow__
+
+Once triggered, the workflow progress will be visible in GitHub Actions, as illustrated below:
 
 ![Deploy Infrastructure](./docs/deploy-infrastructure.png)
 
