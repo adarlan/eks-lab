@@ -12,9 +12,12 @@ locals {
           aws_iam_role.github_role.name,
         ]
       })
-      TF_VAR_acme_email = var.acme_email
-      TF_VAR_domain     = var.domain
-      TF_VAR_hosts      = jsonencode([for k, v in var.hosts : v])
+      TF_VAR_acme_email               = var.acme_email
+      TF_VAR_domain                   = var.domain
+      TF_VAR_hosts                    = jsonencode([for k, v in var.hosts : v])
+      TF_VAR_repository_deploy_key    = base64encode(tls_private_key.repository_deploy_key.private_key_openssh)
+      TF_VAR_github_repository        = var.github_repository
+      TF_VAR_repository_ssh_clone_url = data.github_repository.repository.ssh_clone_url
     },
     {
       for k, v in var.hosts : "TF_VAR_${k}_host" => v
