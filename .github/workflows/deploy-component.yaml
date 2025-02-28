@@ -29,7 +29,6 @@ jobs:
 
   argo-cd:
     if: (github.event_name == 'workflow_dispatch' && inputs.component == 'argo-cd') || (github.event_name == 'push' && needs.changes.outputs.argo-cd == 'true')
-    needs: [namespace-governance, crds]
     uses: ./.github/workflows/terraform-apply.yaml
     with:
       dir: argo-cd
