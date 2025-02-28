@@ -1,12 +1,12 @@
 name: Deploy Component
 
 on:
-  # workflow_dispatch:
-  #   inputs:
-  #     component:
-  #       description: Component to deploy
-  #       type: string
-  #       required: true
+  workflow_dispatch:
+    inputs:
+      component:
+        description: Component to deploy
+        type: string
+        required: true
   push:
     branches:
       - main
@@ -27,16 +27,10 @@ jobs:
             argo-cd:
               - 'argo-cd/**'
 
-  debug:
-    needs: [changes]
-    runs-on: ubuntu-latest
-    steps:
-      - run: echo "${{ needs.changes.outputs.argo-cd }}"
-
   argo-cd:
     needs: [changes]
-    # if: (github.event_name == 'workflow_dispatch' && inputs.component == 'argo-cd') || (github.event_name == 'push' && needs.changes.outputs.argo-cd == 'true')
-    if: needs.changes.outputs.argo-cd == 'true'
+    if: (github.event_name == 'workflow_dispatch' && inputs.component == 'argo-cd') || (github.event_name == 'push' && needs.changes.outputs.argo-cd == 'true')
+    # if: needs.changes.outputs.argo-cd == 'true'
     uses: ./.github/workflows/terraform-apply.yaml
     with:
       dir: argo-cd
