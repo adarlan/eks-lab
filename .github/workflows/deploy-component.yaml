@@ -1,0 +1,36 @@
+name: Deploy Component
+
+on:
+  workflow_dispatch:
+    inputs:
+      component:
+        description: Component to deploy
+        type: string
+        required: true
+  push:
+    branches:
+      - main
+
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      argo-cd: ${{ steps.filter.outputs.argo-cd }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      - name: Detect changes
+        id: filter
+        uses: dorny/paths-filter@v3
+        with:
+          filters: |
+            argo-cd:
+              - 'argo-cd/**'
+
+  argo-cd:
+    if: (github.event_name == 'workflow_dispatch' && inputs.component == 'argo-cd') || (github.event_name == 'push' && needs.changes.outputs.argo-cd == 'true')
+    needs: [namespace-governance, crds]
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: argo-cd
+    secrets: inherit
