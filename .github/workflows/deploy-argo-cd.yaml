@@ -1,0 +1,16 @@
+name: Deploy Argo CD
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'argo-cd/**'
+
+jobs:
+  argo-cd:
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: argo-cd
+    secrets: inherit
