@@ -7,6 +7,9 @@ on:
         description: Component to deploy
         type: string
         required: true
+        options:
+          - vpc-network
+          - argo-cd
   push:
     branches:
       - main
@@ -24,13 +27,22 @@ jobs:
         uses: dorny/paths-filter@v3
         with:
           filters: |
+            vpc-network:
+              - 'vpc-network/**'
             argo-cd:
               - 'argo-cd/**'
+
+  vpc-network:
+    needs: [changes]
+    if: (github.event_name == 'workflow_dispatch' && inputs.component == 'vpc-network') || (github.event_name == 'push' && needs.changes.outputs.vpc-network == 'true')
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: vpc-network
+    secrets: inherit
 
   argo-cd:
     needs: [changes]
     if: (github.event_name == 'workflow_dispatch' && inputs.component == 'argo-cd') || (github.event_name == 'push' && needs.changes.outputs.argo-cd == 'true')
-    # if: needs.changes.outputs.argo-cd == 'true'
     uses: ./.github/workflows/terraform-apply.yaml
     with:
       dir: argo-cd
