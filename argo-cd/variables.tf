@@ -21,3 +21,16 @@ variable "cluster_issuer_name" {
 variable "argocd_host" {
   type = string
 }
+
+variable "github_repository" {
+  type = string
+}
+
+variable "repository_deploy_key" {
+  type      = string
+  sensitive = true
+}
+
+variable "repository_ssh_clone_url" {
+  type = string
+}
