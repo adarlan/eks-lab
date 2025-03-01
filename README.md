@@ -108,9 +108,10 @@ To start the deployment:
 - Access your applications via the configured domain
 - Monitor metrics with Grafana and Prometheus
 - Experiment with Kubernetes workloads
-- Destroy resources when finished to avoid unnecessary costs
 
 ### 5. Undeploy Infrastructure 💥
+
+Destroy resources when finished to avoid unnecessary costs:
 
 - Go to your GitHub repository
 - Navigate to the __Actions__ tab
