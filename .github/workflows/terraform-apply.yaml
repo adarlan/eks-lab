@@ -1,3 +1,5 @@
+name: z) terraform-apply
+
 on:
   workflow_call:
     inputs:

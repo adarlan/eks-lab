@@ -1,3 +1,5 @@
+name: x) Apply Kube-Prometheus-Stack
+
 on:
   workflow_dispatch:
   push:

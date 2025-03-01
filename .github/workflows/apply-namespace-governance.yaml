@@ -1,3 +1,5 @@
+name: x) Apply Namespace Governance
+
 on:
   workflow_dispatch:
   push:

@@ -1,3 +1,5 @@
+name: x) Apply Argo CD
+
 on:
   workflow_dispatch:
   push:
