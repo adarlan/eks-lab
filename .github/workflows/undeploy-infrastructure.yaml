@@ -1,4 +1,4 @@
-name: Destroy Infrastructure
+name: Undeploy Infrastructure 💥
 
 on:
   workflow_dispatch:
