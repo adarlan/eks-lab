@@ -1,0 +1,71 @@
+name: Destroy Infrastructure
+
+on:
+  workflow_dispatch:
+
+jobs:
+
+  ingress-nginx:
+    uses: ./.github/workflows/terraform-destroy.yaml
+    with:
+      dir: ingress-nginx
+    secrets: inherit
+
+  kube-prometheus-stack:
+    uses: ./.github/workflows/terraform-destroy.yaml
+    with:
+      dir: kube-prometheus-stack
+    secrets: inherit
+
+  cert-manager:
+    uses: ./.github/workflows/terraform-destroy.yaml
+    with:
+      dir: cert-manager
+    secrets: inherit
+
+  argo-cd:
+    uses: ./.github/workflows/terraform-destroy.yaml
+    with:
+      dir: argo-cd
+    secrets: inherit
+
+  namespace-governance:
+    needs:
+      - ingress-nginx
+      - kube-prometheus-stack
+      - cert-manager
+      - argo-cd
+    uses: ./.github/workflows/terraform-destroy.yaml
+    with:
+      dir: namespace-governance
+    secrets: inherit
+
+  # crds:
+  #   needs:
+  #   uses: ./.github/workflows/kubectl-delete.yaml
+  #   with:
+  #     path: crds/
+  #     kustomize: true
+  #   permissions:
+  #     id-token: write
+  #     contents: read
+  #   secrets: inherit
+
+  eks-cluster:
+    needs:
+      - ingress-nginx
+      - kube-prometheus-stack
+      - cert-manager
+      - argo-cd
+      - namespace-governance
+    uses: ./.github/workflows/terraform-destroy.yaml
+    with:
+      dir: eks-cluster
+    secrets: inherit
+
+  vpc-network:
+    needs: [eks-cluster]
+    uses: ./.github/workflows/terraform-destroy.yaml
+    with:
+      dir: vpc-network
+    secrets: inherit

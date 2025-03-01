@@ -1,0 +1,28 @@
+name: z. terraform-destroy
+
+on:
+  workflow_call:
+    inputs:
+      dir:
+        type: string
+        required: true
+
+jobs:
+  terraform-destroy:
+    runs-on: ubuntu-latest
+    env:
+      TF_CLOUD_ORGANIZATION: ${{ vars.TF_CLOUD_ORGANIZATION }}
+      TF_CLOUD_PROJECT: ${{ vars.TF_CLOUD_PROJECT }}
+      TF_WORKSPACE: ${{ vars.TF_CLOUD_PROJECT }}-${{ inputs.dir }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: "1.10.5"
+          cli_config_credentials_token: "${{ secrets.TFE_TOKEN }}"
+      - name: Terraform Init
+        run: terraform -chdir=${{ inputs.dir }} init
+      - name: Terraform Destroy
+        run: terraform -chdir=${{ inputs.dir }} destroy -input=false -auto-approve
