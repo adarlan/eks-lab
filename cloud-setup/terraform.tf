@@ -1,7 +1,7 @@
 terraform {
   required_version = "1.10.5"
 
-  backend "local" {}
+  cloud {}
 
   required_providers {
     tfe = {
