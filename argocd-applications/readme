@@ -1,3 +1,0 @@
-will be deployed with kubectl apply
-but will be managed with argocd CLI or web UI
-so if you want to dele an app, you need to remove the app configuration from source code and also delete the app from argo cd

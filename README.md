@@ -91,7 +91,7 @@ Once triggered, the workflow progress will be visible in GitHub Actions, as illu
 
 ![Deploy Infrastructure](./docs/deploy-infrastructure.png)
 
-<!-- ### 4. Deploy Applications 📦
+### 4. Deploy Applications 📦
 
 With the infrastructure in place, you can now deploy example applications to the cluster.
 
@@ -100,16 +100,15 @@ To start the deployment:
 - Go to your GitHub repository
 - Navigate to the __Actions__ tab
 - Select the __Deploy Applications__ workflow
-- Click __Run workflow__ -->
+- Click __Run workflow__
 
-### 4. Next Steps 🎯
+### 5. Next Steps 🎯
 
-- Deploy applications with Argo CD
 - Access your applications via the configured domain
 - Monitor metrics with Grafana and Prometheus
 - Experiment with Kubernetes workloads
 
-### 5. Undeploy Infrastructure 💥
+### 6. Undeploy Infrastructure 💥
 
 Destroy resources when finished to avoid unnecessary costs:
 

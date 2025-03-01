@@ -84,5 +84,9 @@ locals {
     argo-cd = [
       "eks:DescribeCluster",
     ]
+
+    argocd-applications = [
+      "eks:DescribeCluster",
+    ]
   }
 }
