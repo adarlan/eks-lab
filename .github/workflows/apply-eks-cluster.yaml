@@ -1,0 +1,14 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'eks-cluster/**'
+
+jobs:
+  eks-cluster:
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: eks-cluster
+    secrets: inherit

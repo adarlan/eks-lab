@@ -1,16 +1,14 @@
-name: 1. Deploy VPC Network
-
 on:
   workflow_dispatch:
   push:
     branches:
       - main
     paths:
-      - 'vpc-network/**'
+      - 'argo-cd/**'
 
 jobs:
-  vpc-network:
+  argo-cd:
     uses: ./.github/workflows/terraform-apply.yaml
     with:
-      dir: vpc-network
+      dir: argo-cd
     secrets: inherit

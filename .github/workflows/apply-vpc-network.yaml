@@ -1,0 +1,14 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'vpc-network/**'
+
+jobs:
+  vpc-network:
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: vpc-network
+    secrets: inherit

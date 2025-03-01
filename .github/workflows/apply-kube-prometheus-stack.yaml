@@ -1,0 +1,14 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'kube-prometheus-stack/**'
+
+jobs:
+  kube-prometheus-stack:
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: kube-prometheus-stack
+    secrets: inherit

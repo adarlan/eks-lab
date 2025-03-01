@@ -1,0 +1,18 @@
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'vpc-network/**'
+
+jobs:
+  crds:
+    uses: ./.github/workflows/kubectl-apply.yaml
+    with:
+      path: crds/
+      kustomize: true
+    permissions:
+      id-token: write
+      contents: read
+    secrets: inherit
