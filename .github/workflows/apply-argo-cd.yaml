@@ -1,4 +1,4 @@
-name: x) Apply Argo CD
+name: x. Apply Argo CD
 
 on:
   workflow_dispatch:

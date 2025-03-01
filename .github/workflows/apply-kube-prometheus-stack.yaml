@@ -1,4 +1,4 @@
-name: x) Apply Kube-Prometheus-Stack
+name: x. Apply Kube-Prometheus-Stack
 
 on:
   workflow_dispatch:

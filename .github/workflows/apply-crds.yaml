@@ -1,4 +1,4 @@
-name: x) Apply CRDs
+name: x. Apply CRDs
 
 on:
   workflow_dispatch:

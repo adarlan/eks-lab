@@ -1,4 +1,4 @@
-name: x) Apply Cert-Manager
+name: x. Apply Cert-Manager
 
 on:
   workflow_dispatch:

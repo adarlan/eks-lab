@@ -1,4 +1,4 @@
-name: x) Apply Namespace Governance
+name: x. Apply Namespace Governance
 
 on:
   workflow_dispatch:

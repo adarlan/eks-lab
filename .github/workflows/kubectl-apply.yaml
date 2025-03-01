@@ -1,4 +1,4 @@
-name: z) kubectl-apply
+name: z. kubectl-apply
 
 on:
   workflow_call:

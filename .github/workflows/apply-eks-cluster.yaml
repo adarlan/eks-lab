@@ -1,4 +1,4 @@
-name: x) Apply EKS Cluster
+name: x. Apply EKS Cluster
 
 on:
   workflow_dispatch:

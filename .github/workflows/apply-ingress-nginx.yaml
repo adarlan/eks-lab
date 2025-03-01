@@ -1,4 +1,4 @@
-name: x) Apply Ingress-Nginx
+name: x. Apply Ingress-Nginx
 
 on:
   workflow_dispatch:

@@ -1,4 +1,4 @@
-name: x) Apply VPC Network
+name: x. Apply VPC Network
 
 on:
   workflow_dispatch:
