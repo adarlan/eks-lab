@@ -110,7 +110,7 @@ To start the deployment:
 - Experiment with Kubernetes workloads
 - Destroy resources when finished to avoid unnecessary costs
 
-### 5. Uneploy Infrastructure 💥
+### 5. Undeploy Infrastructure 💥
 
 - Go to your GitHub repository
 - Navigate to the __Actions__ tab
