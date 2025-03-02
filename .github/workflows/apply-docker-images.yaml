@@ -12,7 +12,7 @@ jobs:
   crud-api:
     uses: ./.github/workflows/docker-build.yaml
     with:
-      name: crud-api
+      name: ${{ vars.EKS_CLUSTER_NAME }}-crud-api
       path: docker-images/crud-api
     permissions:
       id-token: write
