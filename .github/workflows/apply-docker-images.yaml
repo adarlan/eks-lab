@@ -13,7 +13,7 @@ jobs:
     uses: ./.github/workflows/docker-build.yaml
     with:
       name: crud-api
-      path: docker-images/
+      path: docker-images/crud-api
     permissions:
       id-token: write
       contents: read
