@@ -64,6 +64,14 @@ jobs:
       dir: argo-cd
     secrets: inherit
 
+  argocd-applications:
+    needs: [argo-cd]
+    # needs: [namespace-governance, crds]
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: argocd-applications
+    secrets: inherit
+
   ecr-repositories:
     uses: ./.github/workflows/terraform-apply.yaml
     with:
