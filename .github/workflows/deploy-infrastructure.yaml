@@ -63,3 +63,21 @@ jobs:
     with:
       dir: argo-cd
     secrets: inherit
+
+  ecr-repositories:
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: ecr-repositories
+    secrets: inherit
+
+  docker-images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-session-name: docker-images
+          aws-region: ${{ vars.AWS_REGION }}
