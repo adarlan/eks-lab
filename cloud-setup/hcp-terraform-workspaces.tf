@@ -5,9 +5,10 @@ locals {
 resource "tfe_workspace" "workspace" {
   for_each = local.workspace_names
 
-  name         = each.value
-  organization = var.hcp_terraform_organization
-  project_id   = tfe_project.project.id
+  name              = each.value
+  organization      = var.hcp_terraform_organization
+  project_id        = tfe_project.project.id
+  terraform_version = "1.10.5"
 }
 
 # TODO auto_destroy_at?
