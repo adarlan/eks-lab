@@ -7,8 +7,8 @@ This project automates the deployment of an Amazon EKS cluster on AWS using Terr
 - __Amazon EKS__ – Managed __Kubernetes__ cluster
 - __Amazon VPC__ – Networking setup for the cluster
 - __Amazon Route 53__ – DNS management
-- __Terraform__ – Infrastructure as code, with __HCP Terraform__ for remote execution and state management
-- __OpenID Connect__ – Secure AWS authentication without static credentials
+- __Amazon IAM__ + __OpenID Connect__ – Secure AWS authentication without static credentials
+- __Terraform__ + __HCP Terraform__ – Infrastructure as code with remote execution and state management
 - __GitHub Actions__ – Automated infrastructure provisioning
 - __Argo CD__ – Continuous delivery for application deployment
 - __Ingress-Nginx__ – Traffic routing for applications
@@ -36,13 +36,33 @@ Ensure you have the following:
 - Registered domain (can be from any registrar)
 - Amazon Route 53 hosted zone for your domain, with its name servers correctly configured in your domain’s DNS settings
 
-## 1. Fork & Clone the Repository
+## 1. Create Your Own Private Repository
 
-Since this project requires configurations for your cloud accounts, it's recommended to work on your own fork.
+Since this project requires configurations for your cloud accounts, it's recommended to work on your own private repository.
 
 ```shell
-gh repo fork adarlan/eks-lab --clone
+# 1. Clone the public repository
+git clone https://github.com/adarlan/eks-lab.git
 cd eks-lab
+
+# 2. Create a new private repository with GitHub CLI
+gh repo create my-private-eks-lab --private
+
+# 3. Change the remote URL
+git remote set-url origin git@github.com:$(gh api user --jq .login)/my-private-eks-lab.git
+
+gh repo set-default $(gh api user --jq .login)/my-private-eks-lab
+
+# 4. Push to the private repository
+git push -u origin main
+
+# Now you have the original repository locally while also pushing to your new private repo.
+# If you ever need to pull updates from the original, you can add it as another remote:
+git remote add upstream https://github.com/adarlan/eks-lab.git
+
+# Then, to fetch and merge updates:
+git fetch upstream
+git merge upstream/main  # Adjust the branch if necessary
 ```
 
 ## 2. Cloud Setup 🌥️
@@ -55,7 +75,7 @@ It provisions:
 - HCP Terraform workspaces, variables, and API tokens, enabling GitHub Actions to run Terraform commands remotely.
 - GitHub secrets and variables, supplying credentials and configuration details for the GitHub Actions workflows.
 
-Before applying the setup, create a `cloud-setup/terraform.tfvars` file with the following values, replacing them as needed:
+Create a `cloud-setup/terraform.tfvars` file with the following values, replacing them as needed:
 
 ```conf
 github_repository          = "eks-lab"
@@ -74,15 +94,34 @@ hosts = {
 acme_email = "example@example.com"
 ```
 
+Edit the `cloud-setup/terraform.tf` file and replace the `cloud {}` block with the following configurations, replacing the values as needed:
+
+```tf
+  cloud {
+    organization = "example-org"
+    workspaces {
+      name = "my-private-eks-lab-cloud-setup"
+    }
+  }
+```
+
+<!-- Create a `cloud-setup/.env` file with the following values, replacing them as needed:
+
+```shell
+export TF_CLOUD_ORGANIZATION=example-org
+export TF_WORKSPACE=my-private-eks-lab-cloud-setup
+export TF_FORCE_LOCAL_BACKEND=1
+``` -->
+
 Run the following commands to initialize and apply the `cloud-setup` module:
 
 ```shell
+export TF_FORCE_LOCAL_BACKEND=1
 terraform -chdir=cloud-setup init
 terraform -chdir=cloud-setup apply
 ```
 
-This applies the `cloud-setup` configuration using the current user's credentials and stores the Terraform state locally.
-However, this is the only module that runs locally — all other modules are applied via GitHub Actions and managed through HCP Terraform.
+This applies the `cloud-setup` configuration, storing the Terraform state in the designated HCP Terraform workspace while executing Terraform locally to leverage the current user's credentials for AWS, GitHub, and HCP Terraform. This is the only module that runs locally. All other modules are executed remotely within the specified HCP Terraform workspace.
 
 ## 3. Deploy Infrastructure 🏗️
 
