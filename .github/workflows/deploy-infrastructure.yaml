@@ -71,7 +71,11 @@ jobs:
     secrets: inherit
 
   docker-images:
+    needs: [ecr-repositories]
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
     steps:
       - name: Checkout
         uses: actions/checkout@v4
