@@ -1,0 +1,16 @@
+name: x. Apply ECR Repositories
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - 'ecr-repositories/**'
+
+jobs:
+  ecr-repositories:
+    uses: ./.github/workflows/terraform-apply.yaml
+    with:
+      dir: ecr-repositories
+    secrets: inherit
