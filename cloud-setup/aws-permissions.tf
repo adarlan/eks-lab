@@ -88,5 +88,9 @@ locals {
     argocd-applications = [
       "eks:DescribeCluster",
     ]
+
+    ecr-repositories = [
+      "ecr:CreateRepository",
+    ]
   }
 }
