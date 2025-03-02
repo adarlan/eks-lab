@@ -1,5 +1,5 @@
 import structlog
-from _env import APP_ENVIRONMENT, LOG_LEVEL
+from env import APP_ENVIRONMENT, LOG_LEVEL
 
 structlog.configure(
     processors=[

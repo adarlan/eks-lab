@@ -18,3 +18,5 @@ database_latency_seconds = Summary(
     'crudify_database_latency_seconds',
     'Database latency in seconds',
     ['operation'])
+
+# TODO items_created, items_deleted, etc...
