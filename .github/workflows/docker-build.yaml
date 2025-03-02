@@ -1,0 +1,36 @@
+name: z. docker-build
+
+on:
+  workflow_call:
+    inputs:
+      name:
+        type: string
+        required: true
+      path:
+        type: string
+        required: true
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  docker-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ vars.AWS_ROLE_TO_ASSUME }}
+          role-session-name: docker-build
+          aws-region: ${{ vars.AWS_REGION }}
+      - name: Log in to Amazon ECR
+        run: aws ecr get-login-password --region ${{ vars.AWS_REGION }} | docker login --username AWS --password-stdin ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com
+      - name: Build Docker image
+        run: docker build -t ${{ inputs.name }} .
+      - name: Tag Docker image
+        run: docker tag ${{ inputs.name }}:latest ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ inputs.name }}:latest
+      - name: Push Docker image to Amazon ECR
+        run: docker push ${{ vars.AWS_ACCOUNT_ID }}.dkr.ecr.${{ vars.AWS_REGION }}.amazonaws.com/${{ inputs.name }}:latest

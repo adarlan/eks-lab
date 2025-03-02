@@ -1,4 +1,4 @@
-name: x. Apply CRDs
+name: x. Apply Docker Images
 
 on:
   workflow_dispatch:
@@ -6,14 +6,14 @@ on:
     branches:
       - main
     paths:
-      - 'crds/**'
+      - 'docker-images/**'
 
 jobs:
-  crds:
-    uses: ./.github/workflows/kubectl-apply.yaml
+  crud-api:
+    uses: ./.github/workflows/docker-build.yaml
     with:
-      path: crds/
-      kustomize: true
+      name: crud-api
+      path: docker-images/
     permissions:
       id-token: write
       contents: read
