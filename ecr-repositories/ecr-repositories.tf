@@ -1,13 +1,7 @@
 locals {
   ecr_repositories = toset([
-    "crud-api-post",
-    "crud-api-get",
-    "crud-api-put",
-    "crud-api-delete",
-    "crud-client-post",
-    "crud-client-get",
-    "crud-client-put",
-    "crud-client-delete",
+    "crud-api",
+    "crud-client",
   ])
 }
 
