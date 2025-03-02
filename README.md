@@ -9,18 +9,15 @@ This project automates the deployment of an Amazon EKS cluster on AWS using Terr
 - __Amazon Route 53__ – DNS management
 - __Amazon IAM__ + __OpenID Connect__ – Secure AWS authentication without static credentials
 - __Terraform__ + __HCP Terraform__ – Infrastructure as code with remote execution and state management
-- __GitHub Actions__ – Automated infrastructure provisioning
-- __Argo CD__ – Continuous delivery for application deployment
-- __Ingress-Nginx__ – Traffic routing for applications
+- __GitHub Actions__ – Automated workflows
+- __Argo CD__ – Continuous delivery
+- __Ingress-Nginx__ – Traffic routing
 - __Cert-Manager__ + __Let’s Encrypt__ – Automated TLS certificate issuance
 - __Prometheus__ – Metrics scraping
 - __Grafana__ – Dashboard visualization
-
-<!-- - Docker for application container image building -->
-<!-- - Amazon ECR for application container image storage -->
-<!-- - Helm for application deployment packaging -->
-
-<!-- Everything, from cluster creation to tool installation and application deployment, is defined as code, ensuring consistency and repeatability, eliminating the need for manual setup or local dependencies. -->
+- __Docker__ – Container image building
+- __Amazon ECR__ – Container image storage
+- __Helm__ – Kubernetes manifest packaging
 
 ## Prerequisites
 
@@ -29,51 +26,59 @@ Ensure you have the following:
 - AWS account
 - GitHub account
 - HCP Terraform account
-- CLI tools installed and authenticated:
-  - `aws` CLI configured with administrator access to your AWS account
+- Installed and authenticated CLI tools:
+  - `aws` CLI with administrator access to your AWS account
   - `gh` CLI authenticated with your GitHub user
   - `terraform` CLI authenticated with your HCP Terraform user
-- Registered domain (can be from any registrar)
-- Amazon Route 53 hosted zone for your domain, with its name servers correctly configured in your domain’s DNS settings
+- A registered domain (from any registrar)
+- An Amazon Route 53 hosted zone for your domain, with its name servers configured in your domain’s DNS settings
 
 ## 1. Create Your Own Private Repository
 
-Since this project requires configurations for your cloud accounts, it's recommended to work on your own private repository.
+Since this project requires configurations for your cloud accounts, it's recommended to work on your own private repository. GitHub doesn't allow changing a fork’s visibility to private, so instead of forking, you'll need to clone the repository and push it to a new private repository.
+
+Follow these steps:
 
 ```shell
-# 1. Clone the public repository
+# Clone the public repository
 git clone https://github.com/adarlan/eks-lab.git
+
+# Navigate into the project directory
 cd eks-lab
 
-# 2. Create a new private repository with GitHub CLI
+# Create a new private repository
 gh repo create my-private-eks-lab --private
 
-# 3. Change the remote URL
+# Set the 'origin' remote to your new private repository
 git remote set-url origin git@github.com:$(gh api user --jq .login)/my-private-eks-lab.git
 
-gh repo set-default $(gh api user --jq .login)/my-private-eks-lab
-
-# 4. Push to the private repository
+# Push the code to your private repository
 git push -u origin main
+```
 
-# Now you have the original repository locally while also pushing to your new private repo.
-# If you ever need to pull updates from the original, you can add it as another remote:
+To pull updates from the public repository:
+
+```shell
+# Add the 'upstream' remote URL
 git remote add upstream https://github.com/adarlan/eks-lab.git
 
-# Then, to fetch and merge updates:
+# Set your private repository as the GitHub CLI default repository
+gh repo set-default $(gh api user --jq .login)/my-private-eks-lab
+
+# Fetch and merge updates
 git fetch upstream
-git merge upstream/main  # Adjust the branch if necessary
+git merge upstream/main
 ```
 
 ## 2. Cloud Setup 🌥️
 
-This repository is organized into multiple modules, each with its own independent configuration. Among them, `cloud-setup` is a foundational module. While it doesn’t provision the cluster infrastructure or deploy workloads, it establishes the necessary integrations between AWS, GitHub, and HCP Terraform, ensuring that all other modules have the required configurations, credentials, and permissions to function correctly.
+This repository is organized into multiple modules, each with its own independent configuration. Among them, `cloud-setup` is a foundational module. While it doesn’t provision the cluster infrastructure or deploy workloads, it establishes the necessary integrations between AWS, GitHub, and HCP Terraform, ensuring other modules have the required configurations, credentials, and permissions.
 
 It provisions:
 
-- AWS IAM roles and OIDC providers, granting HCP Terraform and GitHub Actions the necessary permissions to manage AWS resources.
-- HCP Terraform workspaces, variables, and API tokens, enabling GitHub Actions to run Terraform commands remotely.
-- GitHub secrets and variables, supplying credentials and configuration details for the GitHub Actions workflows.
+- AWS IAM roles and OIDC providers for HCP Terraform and GitHub Actions
+- HCP Terraform workspaces, variables, and API tokens
+- GitHub secrets and variables for workflows
 
 Create a `cloud-setup/terraform.tfvars` file with the following values, replacing them as needed:
 
@@ -85,7 +90,8 @@ hcp_terraform_organization = "example-org"
 domain = "example.com"
 
 hosts = {
-  application = "app.example.com"
+  hello_world = "hello.example.com"
+  crud_api    = "crud.example.com"
   argocd      = "argocd.example.com"
   grafana     = "grafana.example.com"
   prometheus  = "prometheus.example.com"
@@ -105,14 +111,6 @@ Edit the `cloud-setup/terraform.tf` file and replace the `cloud {}` block with t
   }
 ```
 
-<!-- Create a `cloud-setup/.env` file with the following values, replacing them as needed:
-
-```shell
-export TF_CLOUD_ORGANIZATION=example-org
-export TF_WORKSPACE=my-private-eks-lab-cloud-setup
-export TF_FORCE_LOCAL_BACKEND=1
-``` -->
-
 Run the following commands to initialize and apply the `cloud-setup` module:
 
 ```shell
@@ -121,37 +119,27 @@ terraform -chdir=cloud-setup init
 terraform -chdir=cloud-setup apply
 ```
 
-This applies the `cloud-setup` configuration, storing the Terraform state in the designated HCP Terraform workspace while executing Terraform locally to leverage the current user's credentials for AWS, GitHub, and HCP Terraform. This is the only module that runs locally. All other modules are executed remotely within the specified HCP Terraform workspace.
+This applies the `cloud-setup` configuration, storing Terraform state in the designated HCP Terraform workspace. Terraform executes locally for this module to leverage the current user's credentials.
 
-## 3. Deploy Infrastructure 🏗️
+## 3. Deploy 🚀
 
-With the foundational setup complete, you're ready to deploy the core infrastructure components:
+With the foundational setup complete, trigger the deployment workflow to:
 
-- Provision the EKS cluster along with supporting resources (VPC, Route 53, etc.).
-- Create Kubernetes namespaces and apply Custom Resource Definitions (CRDs).
+- Provision the EKS cluster and supporting infrastructure (VPC, Route 53, etc.)
+- Create Kubernetes namespaces and apply Custom Resource Definitions (CRDs)
 - Install essential tools and services (Ingress-Nginx, Cert-Manager, etc.)
+- Build and deploy example applications (a Hello World app and a CRUD API with its client)
 
 To start the deployment:
 
 - Go to your GitHub repository
 - Navigate to the __Actions__ tab
-- Select the __Deploy Infrastructure__ workflow
+- Select the __Deploy__ workflow
 - Click __Run workflow__
 
-Once triggered, the workflow progress will be visible in GitHub Actions, as illustrated below:
+Once triggered, you can monitor the workflow progress in GitHub Actions:
 
-![Deploy Infrastructure](./docs/deploy-infrastructure.png)
-
-## 4. Deploy Applications 📦
-
-With the infrastructure in place, you can now deploy example applications to the cluster.
-
-To start the deployment:
-
-- Go to your GitHub repository
-- Navigate to the __Actions__ tab
-- Select the __Deploy Applications__ workflow
-- Click __Run workflow__
+![Deploy Workflow](./docs/deploy-workflow.png)
 
 ## 5. Next Steps 🎯
 
@@ -159,11 +147,11 @@ To start the deployment:
 - Monitor metrics with Grafana and Prometheus
 - Experiment with Kubernetes workloads
 
-## 6. Undeploy Infrastructure 💥
+## 6. Undeploy 💥
 
-Destroy resources when finished to avoid unnecessary costs:
+To delete resources and avoid unnecessary costs:
 
 - Go to your GitHub repository
 - Navigate to the __Actions__ tab
-- Select the __Undeploy Infrastructure__ workflow
+- Select the __Undeploy__ workflow
 - Click __Run workflow__
