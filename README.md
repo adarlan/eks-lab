@@ -56,7 +56,7 @@ git remote set-url origin git@github.com:$(gh api user --jq .login)/eks-lab.git
 git push -u origin main
 ```
 
-To pull updates from the public repository:
+<!-- To pull updates from the public repository:
 
 ```shell
 # Add the 'upstream' remote URL
@@ -68,7 +68,7 @@ gh repo set-default $(gh api user --jq .login)/eks-lab
 # Fetch and merge updates
 git fetch upstream
 git merge upstream/main
-```
+``` -->
 
 ## 2. Cloud Setup 🌥️
 
