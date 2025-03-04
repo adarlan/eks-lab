@@ -2,7 +2,7 @@
 
 This project automates the deployment of an Amazon EKS cluster on AWS using Terraform and GitHub Actions. Designed for experimentation, it comes pre-integrated with open-source tools and example applications.
 
-## Key Components
+## Key Components 🛠️
 
 - __Amazon EKS__ – Managed __Kubernetes__ cluster
 - __Amazon VPC__ – Networking setup for the cluster
@@ -19,7 +19,7 @@ This project automates the deployment of an Amazon EKS cluster on AWS using Terr
 - __Amazon ECR__ – Container image storage
 - __Helm__ – Kubernetes manifest packaging
 
-## Prerequisites
+## Prerequisites 📋
 
 Ensure you have the following:
 
@@ -149,7 +149,7 @@ Once triggered, you can monitor the workflow progress in GitHub Actions:
 - Monitor metrics with Grafana and Prometheus
 - Experiment with Kubernetes workloads
 
-## 5. Undeploy 💥
+## 5. Undeploy ❌
 
 To delete resources and avoid unnecessary costs:
 
