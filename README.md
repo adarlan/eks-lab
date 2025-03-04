@@ -82,23 +82,12 @@ It provisions:
 
 Create a `cloud-setup/terraform.tfvars` file and populate it with your values:
 
-```conf
-# Name of your private GitHub repository where the project is hosted.
-github_repo_name = "eks-lab"
-
-# AWS region where the infrastructure will be deployed.
-aws_region = "us-east-1"
-
-# Name of your HCP Terraform organization.
-# This should match the organization set up in your HCP Terraform account.
+<!-- ```conf
+github_repo_name    = "eks-lab"
+aws_region          = "us-east-1"
 hcp_tf_organization = "example-org"
-
-# Registered domain name for your cluster and applications.
-# This domain will be used for ingress and DNS configurations.
-registered_domain = "example.com"
-
-# Map application and service names to their corresponding domain or subdomain.
-# These will be used for ingress routing within the cluster.
+registered_domain   = "example.com"
+acme_email          = "example@example.com"
 ingress_hosts = {
   hello_world = "hello.example.com"
   crud_api    = "crud.example.com"
@@ -106,19 +95,38 @@ ingress_hosts = {
   grafana     = "grafana.example.com"
   prometheus  = "prometheus.example.com"
 }
-
-# Contact email for the ACME (Automated Certificate Management Environment) account.
-# Required for Let's Encrypt to issue TLS certificates.
-acme_email = "example@example.com"
 ```
 
-Create a workspace for storing the `cloud-setup` Terraform state:
+- `github_repo_name`: Name of your private GitHub repository where the project is hosted.
+- `aws_region`: AWS region where the infrastructure will be deployed.
+- `hcp_tf_organization`: Name of your HCP Terraform organization, matching the one in your HCP Terraform account.
+- `registered_domain`: Primary domain used for cluster ingress and DNS configurations.
+- `acme_email`: Contact email for the ACME (Automated Certificate Management Environment) account, required for issuing TLS certificates via Let's Encrypt.
+- `ingress_hosts`: Maps application and service names to their respective domain or subdomain, enabling ingress routing within the cluster. -->
+
+```conf
+github_repo_name    = "eks-lab"         # Name of your private GitHub repository where the project is hosted.
+aws_region          = "us-east-1"       # AWS region where the infrastructure will be deployed.
+hcp_tf_organization = "foo-bar"         # Name of your HCP Terraform organization, matching the one in your HCP Terraform account.
+registered_domain   = "example.com"     # Primary domain used for cluster ingress and DNS configurations.
+acme_email          = "foo@example.com" # Contact email for the ACME account, required for issuing TLS certificates via Let's Encrypt.
+ingress_hosts = { 
+  # Maps applications and services to their respective domains or subdomains, enabling ingress routing within the cluster.
+  hello_world = "hello.example.com"
+  crud_api    = "crud.example.com"
+  argocd      = "argocd.example.com"
+  grafana     = "grafana.example.com"
+  prometheus  = "prometheus.example.com"
+}
+```
+
+Create a workspace for storing the cloud-setup Terraform state:
 
 ```shell
 ./create-cloud-setup-workspace.sh
 ```
 
-Initialize and apply the `cloud-setup` configuration:
+Initialize and apply the cloud-setup configuration:
 
 ```shell
 ./terraform-wrapper.sh cloud-setup --init --apply
