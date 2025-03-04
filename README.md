@@ -33,7 +33,7 @@ Ensure you have the following:
 - A registered domain (from any registrar)
 - An Amazon Route 53 hosted zone for your domain, with its name servers configured in your domain’s DNS settings
 
-## 1. Create Your Own Private Repository
+## 1. Create Your Own Private Repository 🔒
 
 Since this project requires configurations for your cloud accounts, it's recommended to work on your own private repository. GitHub doesn't allow changing a fork’s visibility to private, so instead of forking, you'll need to clone the repository and push it to a new private repository.
 
@@ -47,10 +47,10 @@ git clone https://github.com/adarlan/eks-lab.git
 cd eks-lab
 
 # Create a new private repository
-gh repo create my-private-eks-lab --private
+gh repo create eks-lab --private
 
 # Set the 'origin' remote to your new private repository
-git remote set-url origin git@github.com:$(gh api user --jq .login)/my-private-eks-lab.git
+git remote set-url origin git@github.com:$(gh api user --jq .login)/eks-lab.git
 
 # Push the code to your private repository
 git push -u origin main
@@ -63,7 +63,7 @@ To pull updates from the public repository:
 git remote add upstream https://github.com/adarlan/eks-lab.git
 
 # Set your private repository as the GitHub CLI default repository
-gh repo set-default $(gh api user --jq .login)/my-private-eks-lab
+gh repo set-default $(gh api user --jq .login)/eks-lab
 
 # Fetch and merge updates
 git fetch upstream
@@ -80,48 +80,50 @@ It provisions:
 - HCP Terraform workspaces, variables, and API tokens
 - GitHub secrets and variables for workflows
 
-Create a `cloud-setup/terraform.tfvars` file with the following values, replacing them as needed:
+Create a `cloud-setup/terraform.tfvars` file and populate it with your values:
 
 ```conf
-github_repository          = "eks-lab"
-aws_region                 = "us-east-1"
-hcp_terraform_organization = "example-org"
+# Name of your private GitHub repository where the project is hosted.
+github_repo_name = "eks-lab"
 
-domain = "example.com"
+# AWS region where the infrastructure will be deployed.
+aws_region = "us-east-1"
 
-hosts = {
+# Name of your HCP Terraform organization.
+# This should match the organization set up in your HCP Terraform account.
+hcp_tf_organization = "example-org"
+
+# Registered domain name for your cluster and applications.
+# This domain will be used for ingress configurations.
+registered_domain = "example.com"
+
+# Contact email for the ACME (Automated Certificate Management Environment) account.
+# Required for Let's Encrypt to issue TLS certificates.
+acme_email = "example@example.com"
+
+# Define domain/subdomain names for applications and services running on the cluster.
+ingress_hosts = {
   hello_world = "hello.example.com"
   crud_api    = "crud.example.com"
   argocd      = "argocd.example.com"
   grafana     = "grafana.example.com"
   prometheus  = "prometheus.example.com"
 }
-
-acme_email = "example@example.com"
 ```
 
-Edit the `cloud-setup/terraform.tf` file and replace the `cloud {}` block with the following configurations, replacing the values as needed:
-
-```tf
-  cloud {
-    organization = "example-org"
-    workspaces {
-      name = "my-private-eks-lab-cloud-setup"
-    }
-  }
-```
-
-Run the following commands to initialize and apply the `cloud-setup` module:
+Create a workspace for storing the `cloud-setup` Terraform state:
 
 ```shell
-export TF_FORCE_LOCAL_BACKEND=1
-terraform -chdir=cloud-setup init
-terraform -chdir=cloud-setup apply
+./create-cloud-setup-workspace.sh
 ```
 
-This applies the `cloud-setup` configuration, storing Terraform state in the designated HCP Terraform workspace. Terraform executes locally for this module to leverage the current user's credentials.
+Initialize and apply the `cloud-setup` configuration:
 
-## 3. Deploy 🚀
+```shell
+./terraform-wrapper.sh cloud-setup --apply
+```
+
+## 4. Deploy 🚀
 
 With the foundational setup complete, trigger the deployment workflow to:
 
