@@ -94,14 +94,11 @@ aws_region = "us-east-1"
 hcp_tf_organization = "example-org"
 
 # Registered domain name for your cluster and applications.
-# This domain will be used for ingress configurations.
+# This domain will be used for ingress and DNS configurations.
 registered_domain = "example.com"
 
-# Contact email for the ACME (Automated Certificate Management Environment) account.
-# Required for Let's Encrypt to issue TLS certificates.
-acme_email = "example@example.com"
-
-# Define domain/subdomain names for applications and services running on the cluster.
+# Map application and service names to their corresponding domain or subdomain.
+# These will be used for ingress routing within the cluster.
 ingress_hosts = {
   hello_world = "hello.example.com"
   crud_api    = "crud.example.com"
@@ -109,6 +106,10 @@ ingress_hosts = {
   grafana     = "grafana.example.com"
   prometheus  = "prometheus.example.com"
 }
+
+# Contact email for the ACME (Automated Certificate Management Environment) account.
+# Required for Let's Encrypt to issue TLS certificates.
+acme_email = "example@example.com"
 ```
 
 Create a workspace for storing the `cloud-setup` Terraform state:
@@ -120,7 +121,7 @@ Create a workspace for storing the `cloud-setup` Terraform state:
 Initialize and apply the `cloud-setup` configuration:
 
 ```shell
-./terraform-wrapper.sh cloud-setup --apply
+./terraform-wrapper.sh cloud-setup --init --apply
 ```
 
 ## 3. Deploy 🚀
