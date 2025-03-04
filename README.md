@@ -123,7 +123,7 @@ Initialize and apply the `cloud-setup` configuration:
 ./terraform-wrapper.sh cloud-setup --apply
 ```
 
-## 4. Deploy 🚀
+## 3. Deploy 🚀
 
 With the foundational setup complete, trigger the deployment workflow to:
 
@@ -143,13 +143,13 @@ Once triggered, you can monitor the workflow progress in GitHub Actions:
 
 ![Deploy Workflow](./docs/deploy-workflow.png)
 
-## 5. Next Steps 🎯
+## 4. Next Steps 🎯
 
 - Access your applications via the configured domain
 - Monitor metrics with Grafana and Prometheus
 - Experiment with Kubernetes workloads
 
-## 6. Undeploy 💥
+## 5. Undeploy 💥
 
 To delete resources and avoid unnecessary costs:
 
