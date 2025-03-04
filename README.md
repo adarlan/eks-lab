@@ -38,14 +38,14 @@ Ensure you have the following:
 Since this project requires configurations for your cloud accounts, it's recommended to work on your own private repository. GitHub doesn't allow changing a fork’s visibility to private, so instead of forking, you'll need to clone the repository and push it to a new private repository. Follow these steps:
 
 ```shell
+# Create a new private repository in your account
+gh repo create eks-lab --private
+
 # Clone the public repository
 git clone https://github.com/adarlan/eks-lab.git
 
 # Navigate into the project directory
 cd eks-lab
-
-# Create a new private repository in your account
-gh repo create eks-lab --private
 
 # Set the 'origin' remote to your new private repository
 git remote set-url origin git@github.com:$(gh api user --jq .login)/eks-lab.git
