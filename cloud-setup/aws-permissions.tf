@@ -91,6 +91,10 @@ locals {
 
     ecr-repositories = [
       "ecr:CreateRepository",
+      "ecr:TagResource",
+      "ecr:DescribeRepositories",
+      "ecr:ListTagsForResource",
+      "ecr:DeleteRepository",
     ]
   }
 }

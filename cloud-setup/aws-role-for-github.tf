@@ -37,6 +37,25 @@ data "aws_iam_policy_document" "github_role_permissions" {
   statement {
     effect    = "Allow"
     resources = ["*"]
-    actions   = ["eks:DescribeCluster"]
+    actions   = [
+
+      # Resource: TODO
+      "eks:DescribeCluster",
+
+      # Resource: *
+      "ecr:GetAuthorizationToken",
+
+      # Resource: arn:aws:ecr:REGION:ACCOUNT_ID:repository/GITHUB_REPOSITORY-*
+      "ecr:BatchGetImage",
+      "ecr:BatchCheckLayerAvailability",
+      "ecr:CompleteLayerUpload",
+      "ecr:DescribeImages",
+      "ecr:DescribeRepositories",
+      "ecr:GetDownloadUrlForLayer",
+      "ecr:InitiateLayerUpload",
+      "ecr:ListImages",
+      "ecr:PutImage",
+      "ecr:UploadLayerPart",
+    ]
   }
 }

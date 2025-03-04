@@ -1,2 +1,2 @@
+# Remove this to keep terraform.tfvars
 terraform.tfvars
-terraform.tfbackend

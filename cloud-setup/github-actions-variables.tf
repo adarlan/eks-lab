@@ -27,3 +27,9 @@ resource "github_actions_variable" "EKS_CLUSTER_NAME" {
   repository    = var.github_repository
   value         = var.github_repository # TODO local.cluster_name?
 }
+
+resource "github_actions_variable" "AWS_ACCOUNT_ID" {
+  variable_name = "AWS_ACCOUNT_ID"
+  repository    = var.github_repository
+  value         = data.aws_caller_identity.current.account_id
+}
