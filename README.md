@@ -21,7 +21,7 @@ This project automates the deployment of an Amazon EKS cluster on AWS using Terr
 
 ## Prerequisites 📋
 
-Ensure you have the following:
+<!-- Ensure you have the following: -->
 
 - AWS account
 - GitHub account
