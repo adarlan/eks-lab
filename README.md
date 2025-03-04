@@ -46,7 +46,7 @@ git clone https://github.com/adarlan/eks-lab.git
 # Navigate into the project directory
 cd eks-lab
 
-# Create a new private repository
+# Create a new private repository in your account
 gh repo create eks-lab --private
 
 # Set the 'origin' remote to your new private repository
@@ -62,7 +62,7 @@ To pull updates from the public repository:
 # Add the 'upstream' remote URL
 git remote add upstream https://github.com/adarlan/eks-lab.git
 
-# Set your private repository as the GitHub CLI default repository
+# Set your private repository as default
 gh repo set-default $(gh api user --jq .login)/eks-lab
 
 # Fetch and merge updates
