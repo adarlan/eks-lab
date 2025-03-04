@@ -12,18 +12,30 @@ tf_workspace="$gh_repo_name-$dir"
 
 if grep -Fxq "  cloud {}" $dir/terraform.tf; then
     > $dir/terraform.env
-    echo "export TF_WORKSPACE=\"$tf_workspace\"" >> $dir/terraform.env
     echo "export TF_CLOUD_ORGANIZATION=\"$tf_organization\"" >> $dir/terraform.env
+    echo "export TF_WORKSPACE=\"$tf_workspace\"" >> $dir/terraform.env
     source $dir/terraform.env
 fi
 
-tf_command=apply
+init=false
+apply=false
+destroy=false
+
 for arg in "$@"; do
-    if [[ "$arg" == "--destroy" ]]; then tf_command=destroy; fi
+    if [[ "$arg" == "--init" ]]; then init=true; fi
+    if [[ "$arg" == "--apply" ]]; then apply=true; fi
+    if [[ "$arg" == "--destroy" ]]; then destroy=true; fi
     if [[ "$arg" == "--auto-approve" ]]; then auto_approve_config="-auto-approve"; fi
 done
 
-terraform -chdir=$dir init
-terraform -chdir=$dir $tf_command $auto_approve_config
+if $init; then
+    terraform -chdir=$dir init
+fi
 
-# TODO export each output as a variable, to be sourced into other scripts
+if $apply; then
+    terraform -chdir=$dir apply $auto_approve_config
+fi
+
+if $destroy; then
+    terraform -chdir=$dir destroy $auto_approve_config
+fi
