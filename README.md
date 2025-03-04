@@ -35,9 +35,7 @@ Ensure you have the following:
 
 ## 1. Create Your Own Private Repository 🔒
 
-Since this project requires configurations for your cloud accounts, it's recommended to work on your own private repository. GitHub doesn't allow changing a fork’s visibility to private, so instead of forking, you'll need to clone the repository and push it to a new private repository.
-
-Follow these steps:
+Since this project requires configurations for your cloud accounts, it's recommended to work on your own private repository. GitHub doesn't allow changing a fork’s visibility to private, so instead of forking, you'll need to clone the repository and push it to a new private repository. Follow these steps:
 
 ```shell
 # Clone the public repository
@@ -72,9 +70,7 @@ git merge upstream/main
 
 ## 2. Cloud Setup 🌥️
 
-This repository is organized into multiple modules, each with its own independent configuration. Among them, `cloud-setup` is a foundational module. While it doesn’t provision the cluster infrastructure or deploy workloads, it establishes the necessary integrations between AWS, GitHub, and HCP Terraform, ensuring other modules have the required configurations, credentials, and permissions.
-
-It provisions:
+This repository is organized into multiple modules, each with its own independent configuration. Among them, `cloud-setup` is a foundational module. While it doesn’t provision the cluster infrastructure or deploy workloads, it establishes the necessary integrations between AWS, GitHub, and HCP Terraform, ensuring other modules have the required configurations, credentials, and permissions. It provisions:
 
 - AWS IAM roles and OIDC providers for HCP Terraform and GitHub Actions
 - HCP Terraform workspaces, variables, and API tokens
