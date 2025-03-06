@@ -1,3 +1,5 @@
+name: kubectl-apply
+
 on:
   workflow_call:
     inputs:
