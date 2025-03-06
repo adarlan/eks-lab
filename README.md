@@ -1,6 +1,6 @@
 # EKS Lab
 
-An __Amazon Elastic Kubernetes Service__ (__EKS__) experimentation project that automates the deployment of a Kubernetes cluster, pre-integrated with open-source tools and example applications.
+An __Amazon Elastic Kubernetes Service__ (__EKS__) experimentation project that automates the deployment of a Kubernetes cluster, packed with open-source tools and example applications.
 
 ## Key Components 🛠️
 
