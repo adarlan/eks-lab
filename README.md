@@ -21,17 +21,11 @@ This project automates the deployment of an Amazon EKS cluster on AWS using Terr
 
 ## Prerequisites 📋
 
-Ensure you have the following:
-
-- AWS account
-- GitHub account
-- HCP Terraform account
-- Installed and authenticated CLI tools:
-  - `aws` CLI with administrator access to your AWS account
-  - `gh` CLI authenticated with your GitHub user
-  - `terraform` CLI authenticated with your HCP Terraform user
-- A registered domain (from any registrar)
-- An Amazon Route 53 hosted zone for your domain, with its name servers configured in your domain’s DNS settings
+- __AWS account__ – With the AWS CLI installed and configured for administrator access.
+- __GitHub account__ – With the GitHub CLI installed and authenticated.
+- __HCP Terraform account__ – With the Terraform CLI installed and authenticated.
+- __Registered domain__ – From any domain registrar.
+- __Amazon Route 53 hosted zone__ – Configured for your domain, with its name servers set in your domain’s DNS settings.
 
 ## 1. Create Your Own Private Repository 🔒
 
