@@ -148,7 +148,7 @@ Once triggered, you can monitor the workflow progress in GitHub Actions:
 - Monitor metrics with Grafana and Prometheus
 - Experiment with Kubernetes workloads
 
-## 5. Undeploy ❌
+## 5. Destroy 💥
 
 To delete resources and avoid unnecessary costs:
 
