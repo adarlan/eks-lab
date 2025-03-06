@@ -1,4 +1,4 @@
-name: ❌ Undeploy
+name: Undeploy ❌
 
 on:
   workflow_dispatch:
