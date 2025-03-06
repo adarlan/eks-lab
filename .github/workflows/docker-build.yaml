@@ -1,5 +1,3 @@
-name: docker-build
-
 on:
   workflow_call:
     inputs:
