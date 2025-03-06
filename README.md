@@ -1,6 +1,6 @@
 # EKS Lab
 
-This project automates the deployment of an Amazon EKS cluster on AWS using Terraform and GitHub Actions. Designed for experimentation, it comes pre-integrated with open-source tools and example applications.
+An __Amazon Elastic Kubernetes Service__ (__EKS__) experimentation project that automates the deployment of a Kubernetes cluster, pre-integrated with open-source tools and example applications.
 
 ## Key Components 🛠️
 
