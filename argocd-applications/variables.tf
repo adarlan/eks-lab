@@ -10,7 +10,11 @@ variable "cluster_name" {
   type = string
 }
 
-variable "application_host" {
+variable "hello_world_host" {
+  type = string
+}
+
+variable "crud_api_host" {
   type = string
 }
 

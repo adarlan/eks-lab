@@ -27,7 +27,7 @@ resource "kubernetes_manifest" "hello_world" {
           valuesObject = {
             message = "Cheguei, Brasil!"
             ingress = {
-              host = var.application_host
+              host = var.hello_world_host
             }
           }
         }
