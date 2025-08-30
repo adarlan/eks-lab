@@ -4,7 +4,7 @@ An __Amazon Elastic Kubernetes Service__ (__EKS__) experimentation project that 
 
 ## Key Components 🛠️
 
-- __Amazon EKS__ – Managed __Kubernetes__ cluster
+- __Amazon EKS__ – Managed Kubernetes cluster
 - __Amazon VPC__ – Networking setup for the cluster
 - __Amazon Route 53__ – DNS management
 - __Amazon IAM__ + __OpenID Connect__ – Secure AWS authentication without static credentials
